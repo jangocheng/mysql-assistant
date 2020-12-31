@@ -1,0 +1,10 @@
+owen2020
+.vscode
+.idea
+.DS_Store
+.env
+storage/*
+/models/*
+testing/storage
+tests/storage
+assets/*
