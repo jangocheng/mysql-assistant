@@ -3,12 +3,9 @@ package main
 // swagger 自动接口文档
 // https://github.com/swaggo/swag/blob/master/README_zh-CN.md#%E6%94%AF%E6%8C%81%E7%9A%84Web%E6%A1%86%E6%9E%B6
 import (
-	"log"
-	"os"
-	"owen2020/app/apputil/foundations"
-	routes "owen2020/routes"
-
 	"github.com/joho/godotenv"
+	"log"
+	"owen2020/app"
 
 	_ "net/http/pprof"
 )
@@ -63,16 +60,5 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	go func() {
-		if os.Getenv("APP_ENV") == "local" {
-			foundations.OpenBrowser("http://127.0.0.1" + os.Getenv("APP_PORT") + "/admin/entrance/login.html")
-		}
-	}()
-
-	defer func() {
-		routes.RmPidFile()
-	}()
-
-	routes.StartGin()
-
+	app.StartWebServer()
 }

@@ -47,8 +47,7 @@ func main() {
 				Action:  command.Dev,
 			},
 			{
-				Name: "binlog-start",
-				// Aliases: []string{"a"},
+				Name:   "binlog-start",
 				Usage:  "开始消费mysql binlog",
 				Action: command.StartBinlogClient,
 				Flags: []cli.Flag{
@@ -61,40 +60,23 @@ func main() {
 				},
 			},
 			{
-				Name: "canal-start",
-				// Aliases: []string{"a"},
+				Name:   "canal-start",
 				Usage:  "启动canal客户端",
 				Action: command.CanalClient,
 			},
 			{
-				Name: "grpc-server-start",
-				// Aliases: []string{"a"},
-				Usage:  "启动grpc服务端",
-				Action: command.GrpcServerStart,
-			},
-
-			{
-				Name: "grpc-client-start",
-				// Aliases: []string{"a"},
-				Usage:  "启动grpc客户端",
-				Action: command.GrpcClientStart,
-			},
-			{
-				Name: "zipkin",
-				// Aliases: []string{"a"},
-				Usage:  "zipkin日志",
-				Action: command.ZipkinTest,
-			},
-			{
-				Name: "open-browser",
-				// Aliases: []string{"a"},
+				Name:   "open-browser",
 				Usage:  "打开浏览器",
 				Action: command.OpenBrowser,
+			},
+			{
+				Name:   "web-start",
+				Usage:  "启动web服务器",
+				Action: command.StartWebServer,
 			},
 		},
 	}
 
-	//apputil.PrettyPrint(os.Args)
 	err = app.Run(os.Args)
 	if err != nil {
 		log.Fatal(err)
