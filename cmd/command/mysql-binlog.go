@@ -2,6 +2,7 @@ package command
 
 import (
 	"context"
+	"fmt"
 	"owen2020/cmd/command/handle_binlog"
 	"owen2020/cmd/command/mysqlutil"
 
@@ -69,6 +70,8 @@ func StartBinlogClient(c *cli.Context) error {
 	// pos, _ := strconv.ParseUint(masterPosition["Position"], 10, 32)
 	u32 := uint32(masterPosition["Position"].(uint64))
 	streamer, _ := syncer.StartSync(mysql.Position{masterPosition["File"].(string), u32})
+
+	fmt.Println("begin sync and handle mysql binlog")
 	for {
 		ev, _ := streamer.GetEvent(context.Background())
 		// Dump event
