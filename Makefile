@@ -3,6 +3,7 @@
 # 参考
 # 在 Golang 中开发中使用 Makefile
 # https://studygolang.com/articles/11131
+
 # Golang的跨平台编译程序
 # https://www.cnblogs.com/ghj1976/archive/2013/04/19/3030703.html
 #各平台的GOOS和GOARCH参考
@@ -12,6 +13,11 @@
 #freebsd              386 / amd64                   >= FreeBSD 7
 #windows              386 / amd64                   >= Windows 2000
 
+# Golang 编译Mac、Linux、Windows多平台可执行程序
+# https://studygolang.com/articles/28339?fr=sidebar
+
+# Docker命令_各种参数简介（run、v、rm、-w、-u、-e）
+# https://blog.csdn.net/sxzlc/article/details/107676425
 
 # 定义make变量
 GO=go
