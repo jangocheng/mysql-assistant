@@ -44,6 +44,11 @@ DB_EVENT_FILTER=".*\\..*"
 > http://127.0.0.1:8000/admin/entrance/login.html
 `APP_ENV不等于local时，不自动调起浏览器`
 
+`如何修改登录密码`
+> echo -n "新密码" | openssl dgst -sha1
+
+把生成的新密码，替换administrator表中password字段既可。
+
 ### 启动mysql-binlog消费服务。 
 一个mysql实例对应一个消费者。 非一个数据库对应一个消费者。  
 `注意：启动mysql-binlog消费者的mysql 链接信息不需要配置到env中， 直接命令行指定。 `
