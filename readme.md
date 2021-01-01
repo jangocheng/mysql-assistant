@@ -37,33 +37,34 @@ DB_EVENT_FILTER=".*\\..*"
 ```
 
 ### 启动web服务
-./business_data_model web-start
-可以看到自动打页网页, 用户名密码 默认为admin, admin
+```bash
+./business_data_model web-start 
+```
+本地（APP_ENV=local时）自动打页网页, 用户名密码 默认为admin, admin
 > http://127.0.0.1:8000/admin/entrance/login.html
-`env中APP_ENV=local时，启动web服务时会自动打开浏览器。 如在服务器上布置不需要打开浏览器，变更local为其他值`
+`APP_ENV不等于local时，不自动调起浏览器`
 
 ### 启动mysql-binlog消费服务。 
-一个mysql实例对应一个消费者。 非一个数据库对应一个消费者。
+一个mysql实例对应一个消费者。 非一个数据库对应一个消费者。  
 `注意：启动mysql-binlog消费者的mysql 链接信息不需要配置到env中， 直接命令行指定。 `
-```
+
+```bash
 ./business_data_model binlog-start -host="127.0.0.1" -username="root" -password="password"
 ```
 #### 指定过滤数据库表
 默认过滤条件为: ".*\\..*" , 监听任何库，任何表的binlog事件。
-
-启动mysql-binlog消费者时，指定过滤条件：
-```
-多个过滤表达用，号隔开。
+启动mysql-binlog消费者时，指定过滤条件  
+```bash
+#多个过滤表达用，号隔开。
+#codeper库的任何表，和test.table1, test.table2都是关系的表。 不符合条件的抛弃，不写入ddd_event_stream表中。
 ./business_data_model binlog-start -host="127.0.0.1" -username="root" -password="password" -filter="codeper\\..*,test\\.table1,test\\.table2"
-以上过滤为： codeper库的任何表，和test.table1, test.table2都是关系的表。 不符合条件的抛弃，不写入ddd_event_stream表中。
 ```
 
 ### 可以监听多个mysql实例， 如再增加一个监听
-mysql-binlog消费者可以任意启动多个。
-```
+mysql-binlog消费者可以任意启动多个。  
+```bash
 nohup ./business_data_model binlog-start -host="127.0.0.1" -username="root" -password="password" 2&>1 >out.log &
 ```
-
 
 ## 业务数据模型管理系统使用说明
 ### 生成的data_stream数据流如下,可标识出同事务插入，列新，删除的数据。支持库，表，事务的搜索。
