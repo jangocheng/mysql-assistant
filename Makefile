@@ -42,11 +42,18 @@ mod:
 	$(GO) mod tidy
 
 build: mod clean test
-	$(GOBUILD) -o $(BINARY_NAME) -v ./cmd/cmd.go
-	shasum -a 256 $(BINARY_NAME)
+	$(GOBUILD) -o $(CMD_BINARY_NAME) -v ./cmd/cmd.go
+	shasum -a 256 $(CMD_BINARY_NAME)
 
-release :
-
+publish:
+	mkdir ./release/storage && chmod 777 ./release/storage
+	cp ./bin/* ./release
+	cp -r ./assets ./release
+	cp .env.example ./release
+	cp .env.example ./release/.env
+	cp ./deploy/business_event.sql ./release
+	zip -r release.zip release
+	rm -rf ./release/*
 
 # Cross compilation
 build-linux:
