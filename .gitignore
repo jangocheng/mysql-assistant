@@ -9,3 +9,4 @@ testing/storage
 tests/storage
 assets/*
 bin/*
+release/*
