@@ -1,8 +1,17 @@
 # 项目
-业务数据模型管理系统
+业务数据模型管理系统是一款技术管理工具，辅助技术人员管理业务数据结构。 管理业务事件和文档。  
 
 地址：> https://gitee.com/youwen21/business_data_model-go
 
+## 解决什么问题
+当下用户下单事件都插入了哪些表？ 更新哪些表？ 更新的哪些字段？  
+每个事件迭代过几版？    
+新来的开发人员要怎么熟悉原来的系统？  想知道用户下单做了哪些事情必须要看源码吗？  
+因快束发展，业务数据库中是否有太多冗余字段？  
+系统BUG多数因数据不正确，或导致数据不正确，有没有办法降低错误数据机率？  
+一个功能，数据库应该修改哪几个字段，取哪些字段，是否需要口传？ 是否可让新接手的人更容易了解系统？   
+  
+有以上疑问的任何一条， 都可以用业务数据模型管理解决。
 
 ## 安装
 ### 下载地址
@@ -71,22 +80,8 @@ mysql-binlog消费者可以任意启动多个。
 nohup ./business_data_model binlog-start -host="127.0.0.1" -username="root" -password="password" 2&>1 >out.log &
 ```
 
-## 业务数据模型管理系统使用说明
-### 生成的data_stream数据流如下,可标识出同事务插入，列新，删除的数据。支持库，表，事务的搜索。
-![事件数据流](/doc/images/event_stream.jpg)
-### 根据数据流，创建事件
-![创建事件](/doc/images/event_create.jpg)
-### 查看事件或数据流内容详情
-![事件和数据内容详情](/doc/images/data_model_effect.jpg)
-### 数据流或事件对比创建好的事件
-![数据流或事件对比事件](/doc/images/data_model_diff.jpg)
+[业务数据模型管理系统使用说明](/doc/ui.md)
 
-## 更新数据异同对比示例
-![数据对比](/doc/images/diff_update_column.jpg)
-![数据对比](/doc/images/diff_update_value.jpg)
-
-## 根据事件ID或者勾选的事件流IDS自动生成ER图
-![自动生成ER图](/doc/images/create_er.jpg)
 
 
 

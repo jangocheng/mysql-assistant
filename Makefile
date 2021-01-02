@@ -19,6 +19,9 @@
 # Docker命令_各种参数简介（run、v、rm、-w、-u、-e）
 # https://blog.csdn.net/sxzlc/article/details/107676425
 
+# Makefile 入门
+# https://zhuanlan.zhihu.com/p/149346441
+
 # 定义make变量
 GO=go
 GOBUILD=$(GO) build
@@ -39,6 +42,7 @@ clean:
 #	rm -f $(CMD_BINARY_NAME)
 #	rm -f $(CMD_BINARY_UNIX)
 	rm -f $(BINARY_PATH)/*
+
 mod:
 	$(GO) mod tidy
 
@@ -67,33 +71,26 @@ publish: clean-dir publish-linux publish-windows publish-mac
 
 clean-dir:
 	rm -rf ./release/*
+	rm -f release_*.zip
 
-publish-mac:
-	mkdir ./release/storage && chmod 777 ./release/storage
-	cp ./bin/business_data_model_mac ./release
+publish-common-init:
+	mkdir -p ./release/storage/logs && chmod -R 777 ./release/storage
 	cp -r ./assets ./release
 	cp .env.example ./release
 	cp .env.example ./release/.env
 	cp ./deploy/business_event.sql ./release
+
+publish-mac: publish-common-init
+	cp ./bin/business_data_model_mac ./release
 	zip -r release_mac-`date +%Y%m%d`.zip release
 	rm -rf ./release/*
 
-publish-windows:
-	mkdir ./release/storage && chmod 777 ./release/storage
+publish-windows: publish-common-init
 	cp ./bin/business_data_model_windows.exe ./release
-	cp -r ./assets ./release
-	cp .env.example ./release
-	cp .env.example ./release/.env
-	cp ./deploy/business_event.sql ./release
 	zip -r release_windows-`date +%Y%m%d`.zip release
 	rm -rf ./release/*
 
-publish-linux:
-	mkdir ./release/storage && chmod 777 ./release/storage
+publish-linux: publish-common-init
 	cp ./bin/business_data_model_linux ./release
-	cp -r ./assets ./release
-	cp .env.example ./release
-	cp .env.example ./release/.env
-	cp ./deploy/business_event.sql ./release
 	zip -r release_linux-`date +%Y%m%d`.zip release
 	rm -rf ./release/*
