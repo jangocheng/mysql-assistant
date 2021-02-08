@@ -14,6 +14,9 @@ func InitDBTables() {
 	dbs := mysqlutil.GetDBs(gorm)
 
 	for _, db := range dbs {
+		if db == "" {
+			continue
+		}
 		FlushDBTables(db)
 	}
 }

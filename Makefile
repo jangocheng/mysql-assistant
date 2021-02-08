@@ -22,6 +22,8 @@
 # Makefile 入门
 # https://zhuanlan.zhihu.com/p/149346441
 
+# 使用xgo编译支持CGO
+
 # 定义make变量
 GO=go
 GOBUILD=$(GO) build
@@ -46,19 +48,20 @@ clean:
 mod:
 	$(GO) mod tidy
 
-build: mod clean test build-mac build-linux build-windows
+build: mod clean test build-mac build-windows build-linux-amd64
 	echo "build done"
 #	$(GOBUILD) -o $(CMD_BINARY_NAME) -v ./cmd/cmd.go
 #	shasum -a 256 $(CMD_BINARY_NAME)
 
 # Cross compilation
-build-linux:
+build-linux-amd64:
 	export CGO_ENABLED=0 GOOS=linux GOARCH=amd64
 	$(GOBUILD) -o $(CMD_BINARY_NAME)_linux -v ./cmd/cmd.go
 	#shasum -a 256 $(CMD_BINARY_NAME)_linux
 build-windows:
-	export CGO_ENABLED=0 GOOS=windows GOARCH=386
-	$(GOBUILD) -o $(CMD_BINARY_NAME)_windows.exe -v ./cmd/cmd.go
+	xgo --targets="windows/*" -dest=$(BINARY_PATH) ./cmd/
+	#export CGO_ENABLED=0 GOOS=windows GOARCH=386
+	#$(GOBUILD) -o $(CMD_BINARY_NAME)_windows.exe -v ./cmd/cmd.go
 	#shasum -a 256 $(CMD_BINARY_NAME)_windows
 build-mac:
 	export CGO_ENABLED=0 GOOS=darwin GOARCH=amd64

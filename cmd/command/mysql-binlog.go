@@ -3,8 +3,10 @@ package command
 import (
 	"context"
 	"fmt"
+	"owen2020/app/apputil"
 	"owen2020/cmd/command/handle_binlog"
 	"owen2020/cmd/command/mysqlutil"
+	"owen2020/conn"
 
 	"github.com/siddontang/go-mysql/mysql"
 	"github.com/siddontang/go-mysql/replication"
@@ -45,6 +47,8 @@ func StartBinlogClient(c *cli.Context) error {
 	// apputil.PrettyPrint(c.String("password"))
 	// apputil.PrettyPrint(c.String("filter"))
 
+	conn.InitDB(host, port, username, password)
+
 	cfg := replication.BinlogSyncerConfig{
 		ServerID: uint32(serverID),
 		Flavor:   "mysql",
@@ -70,6 +74,9 @@ func StartBinlogClient(c *cli.Context) error {
 	// pos, _ := strconv.ParseUint(masterPosition["Position"], 10, 32)
 	u32 := uint32(masterPosition["Position"].(uint64))
 	streamer, _ := syncer.StartSync(mysql.Position{masterPosition["File"].(string), u32})
+
+	apputil.PrettyPrint(handle_binlog.DBTables)
+	fmt.Println()
 
 	fmt.Println("begin sync and handle mysql binlog")
 	for {

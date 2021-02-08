@@ -3,6 +3,7 @@ package handle_binlog
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"owen2020/app/apputil"
 	"owen2020/app/models"
 	"owen2020/conn"
@@ -143,7 +144,16 @@ func HandleEvent(e *replication.BinlogEvent) {
 func handleQueryEvent(e *replication.BinlogEvent) {
 	ev, _ := e.Event.(*replication.QueryEvent)
 	fmt.Println(ev)
+	if string(ev.Schema) == "" {
+		apputil.PrettyPrint(e)
+		fmt.Println("schema begin")
+		apputil.PrettyPrint(string(ev.Schema))
+		fmt.Println("schema end")
+		e.Dump(os.Stdout)
+		return
+	}
 	FlushDBTables(string(ev.Schema))
+	apputil.PrettyPrint(DBTables)
 }
 func handleUpdateEventV1(e *replication.BinlogEvent) {
 	ev, _ := e.Event.(*replication.RowsEvent)

@@ -1,18 +1,14 @@
 package routes
 
 import (
+	"github.com/gin-gonic/gin"
 	"io"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
-	"syscall"
-
-	"github.com/gin-gonic/gin"
 
 	"owen2020/app/http/middleware"
-
-	"github.com/fvbock/endless"
 )
 
 //StartGin 启动服务器，监听端口, 配置路由
@@ -25,17 +21,19 @@ func StartGin() {
 	// go func() {
 	// 	router.Run(":80")
 	// }()
-	server := endless.NewServer(os.Getenv("APP_PORT"), router)
-	server.BeforeBegin = func(add string) {
-		pid := syscall.Getpid()
-		log.Printf("Actual pid is %d", pid)
-		WritePidToFile(pid)
-	}
+	//server := endless.NewServer(os.Getenv("APP_PORT"), router)
+	//server.BeforeBegin = func(add string) {
+	//	pid := syscall.Getpid()
+	//	log.Printf("Actual pid is %d", pid)
+	//	WritePidToFile(pid)
+	//}
+	//
+	//err := server.ListenAndServe()
+	//if err != nil {
+	//	log.Printf("Server err: %v", err)
+	//}
 
-	err := server.ListenAndServe()
-	if err != nil {
-		log.Printf("Server err: %v", err)
-	}
+	router.Run(os.Getenv("APP_PORT"))
 }
 
 func SetUpRouter() *gin.Engine {

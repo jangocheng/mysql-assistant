@@ -11,6 +11,7 @@ import (
 
 //GetGormConnByDbConfig 根据配置获取一个gorm db 句柄
 func GetGormConnByDbConfig(DbConfig replication.BinlogSyncerConfig) *gorm.DB {
+
 	return conn.GetGorm(DbConfig.Host, int(DbConfig.Port), DbConfig.User, DbConfig.Password)
 }
 
