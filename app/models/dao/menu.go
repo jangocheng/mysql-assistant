@@ -10,7 +10,7 @@ func GetMenuList() []models.Menu {
 
 	results := []models.Menu{}
 
-	err := gorm.Table("menu").Where("status > ? and is_deleted= ?", 0, 0).Find(&results).Error
+	err := gorm.Debug().Table("menu").Where("is_deleted= ?", 0).Find(&results).Error
 	if err != nil {
 		return nil
 	}

@@ -17,17 +17,15 @@ func adminRoute(router *gin.Engine) {
 	cacheAPI.Use(middleware.AdminToken)
 	cacheAPI.Use(middleware.BrowserCacheMiddleware)
 	{
-
+		// 菜单树
+		cacheAPI.GET("/sidebar", admin.GetSideBarTree)
 	}
 
 	adminAPI := router.Group("/admin-api/v1")
 	adminAPI.Use(middleware.AdminToken)
 	{
-		// 菜单树
-		cacheAPI.GET("/sidebar", admin.GetSideBarTree)
-
 		// 菜单列表
-		cacheAPI.GET("/menu", admin.GetMenuList)
+		adminAPI.GET("/menu", admin.GetMenuList)
 
 		// 事件列表 完成
 		adminAPI.GET("/ddd_event", admin.GetDddEventList)
@@ -54,6 +52,10 @@ func adminRoute(router *gin.Engine) {
 
 		// er图 实体关系图 完成
 		adminAPI.GET("/ddd_er", admin.DddEr)
+	}
+
+	{
+		adminAPI.GET("/state_class", admin.GetMenuList)
 	}
 
 }

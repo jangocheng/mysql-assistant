@@ -9,18 +9,12 @@ import (
 	"gorm.io/gorm"
 )
 
-//GetGormConnByDbConfig 根据配置获取一个gorm db 句柄
-func GetGormConnByDbConfig(DbConfig replication.BinlogSyncerConfig) *gorm.DB {
-
-	return conn.GetGorm(DbConfig.Host, int(DbConfig.Port), DbConfig.User, DbConfig.Password)
-}
-
 func GetMysqlPosition(cfg replication.BinlogSyncerConfig) map[string]interface{} {
 	sql := "show master status"
 	results := make(map[string]interface{})
 
-	query := GetGormConnByDbConfig(cfg)
-	err := query.Raw(sql).Find(&results).Error
+	gorm := conn.GetSyncerGorm()
+	err := gorm.Raw(sql).Find(&results).Error
 	if err != nil {
 		log.Fatal(err)
 		return nil

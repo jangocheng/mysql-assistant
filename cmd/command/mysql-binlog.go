@@ -35,20 +35,36 @@ import (
 
 //StartBinlogClient 消费mysql binlog
 func StartBinlogClient(c *cli.Context) error {
+	// 参数获取
 	host := c.String("host")
 	port := c.Int("port")
 	serverID := c.Int("server_id")
 	username := c.String("username")
 	password := c.String("password")
+
 	filter := c.String("filter")
-	// apputil.PrettyPrint(c.Int("port"))
-	// apputil.PrettyPrint(c.Int("server_id"))
-	// apputil.PrettyPrint(c.String("username"))
-	// apputil.PrettyPrint(c.String("password"))
-	// apputil.PrettyPrint(c.String("filter"))
+	fmt.Println(filter)
+	fmt.Println(handle_binlog.Filter)
 
-	conn.InitDB(host, port, username, password)
+	// 初始化sync数据库连接池
+	conn.InitSyncerGormPool(host, port, username, password)
+	// 取出所有库表的字段ID对应的字段名
+	// 初始化所有库.表的字段ID对应字段名
+	handle_binlog.InitDBTables()
+	fmt.Println()
+	apputil.PrettyPrint("begin print db tables")
+	fmt.Println()
+	apputil.PrettyPrint(handle_binlog.DBTables)
+	fmt.Println()
+	apputil.PrettyPrint("end print db tables")
+	fmt.Println()
 
+	// 初始化event数据库链接池
+	conn.InitEventGormPool()
+	//初始化 - 需要检查状态变更正确的数据
+
+
+	// 初始化 binlog数据库同步配置
 	cfg := replication.BinlogSyncerConfig{
 		ServerID: uint32(serverID),
 		Flavor:   "mysql",
@@ -57,15 +73,6 @@ func StartBinlogClient(c *cli.Context) error {
 		User:     username,
 		Password: password,
 	}
-
-	// 定义过滤
-	handle_binlog.Filter = filter
-	handle_binlog.Cfg = cfg
-
-	// 取出所有库表的字段ID对应的字段名
-	// 初始化所有库.表的字段ID对应字段名
-	handle_binlog.InitDBTables()
-
 	// 获取binlog file position
 	masterPosition := mysqlutil.GetMysqlPosition(cfg)
 
@@ -74,9 +81,6 @@ func StartBinlogClient(c *cli.Context) error {
 	// pos, _ := strconv.ParseUint(masterPosition["Position"], 10, 32)
 	u32 := uint32(masterPosition["Position"].(uint64))
 	streamer, _ := syncer.StartSync(mysql.Position{masterPosition["File"].(string), u32})
-
-	apputil.PrettyPrint(handle_binlog.DBTables)
-	fmt.Println()
 
 	fmt.Println("begin sync and handle mysql binlog")
 	for {

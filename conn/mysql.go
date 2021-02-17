@@ -16,8 +16,6 @@ import (
 
 // time_zone时区问题 https://studygolang.com/articles/17313?fr=sidebar
 
-
-
 // https://gorm.io/docs/index.html
 //GetDefaultGorm
 func GetDefaultGorm() *gorm.DB {
@@ -64,17 +62,7 @@ func GetGormWithConfig(config *gorm.Config) *gorm.DB {
 	return db
 }
 
-//GetEventGorm
-func GetEventGorm() *gorm.DB {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&loc=Local", os.Getenv("DB_EVENT_USERNAME"), os.Getenv("DB_EVENT_PASSWORD"), os.Getenv("DB_EVENT_HOST"), 3306, os.Getenv("DB_EVENT_DATABASE"), os.Getenv("DB_EVENT_CHARSET"))
-	mysqlDb := mysql.Open(dsn)
-	db, err := gorm.Open(mysqlDb, &gorm.Config{})
-	if err != nil {
-		panic("failed to connect database")
-	}
 
-	return db
-}
 
 func GetGormBc(host string, port int, username string, password string) *gorm.DB {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/?charset=utf8&loc=Local", username, password, host, 3306)
@@ -86,15 +74,14 @@ func GetGormBc(host string, port int, username string, password string) *gorm.DB
 	return db
 }
 
+// func GetGorm(host string, port int, username string, password string) *gorm.DB {
+// 	gdb, err := gorm.Open(mysql.New(mysql.Config{Conn: DB}), &gorm.Config{})
+// 	if err != nil {
+// 		panic("failed to connect database")
+// 	}
 
-func GetGorm(host string, port int, username string, password string) *gorm.DB {
-	gdb, err := gorm.Open(mysql.New(mysql.Config{Conn: DB}), &gorm.Config{})
-	if err != nil {
-		panic("failed to connect database")
-	}
-
-	return gdb
-}
+// 	return gdb
+// }
 
 //GetRawDb 原生DB
 func GetRawDb() *sql.DB {

@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"os"
 	"owen2020/cmd/command/mysqlutil"
+	"owen2020/conn"
 	"regexp"
 	"strings"
 )
 
 func InitDBTables() {
-	gorm := mysqlutil.GetGormConnByDbConfig(Cfg)
+	gorm := conn.GetSyncerGorm()
 
 	dbs := mysqlutil.GetDBs(gorm)
 
@@ -22,7 +23,7 @@ func InitDBTables() {
 }
 
 func FlushDBTables(db string) {
-	tables := mysqlutil.GetTableNames(mysqlutil.GetGormConnByDbConfig(Cfg), db)
+	tables := mysqlutil.GetTableNames(conn.GetSyncerGorm(), db)
 	for _, v := range tables {
 		FlushTableIdentifierNameMap(db, v)
 	}
@@ -40,7 +41,7 @@ func FlushTableIdentifierNameMap(db string, table string) {
 
 	results := []map[string]interface{}{}
 
-	gorm := mysqlutil.GetGormConnByDbConfig(Cfg)
+	gorm := conn.GetSyncerGorm()
 
 	err := gorm.Raw(sql).Find(&results).Error
 	if err != nil {
@@ -59,7 +60,7 @@ func FlushTableIdentifierNameMap(db string, table string) {
 
 //FilterTable 检查table 是否在正则中
 func FilterTable(db string, table string) bool {
-	if db == os.Getenv("DB_EVENT_DATABASE") {
+	if true == SkipTable(db, table) {
 		return false
 	}
 
@@ -69,6 +70,18 @@ func FilterTable(db string, table string) bool {
 		if ok {
 			return true
 		}
+	}
+
+	return false
+}
+
+func SkipTable(db string, table string) bool {
+	if db == os.Getenv("DB_EVENT_DATABASE") {
+		return true
+	}
+
+	if db == "mysql" {
+		return true
 	}
 
 	return false

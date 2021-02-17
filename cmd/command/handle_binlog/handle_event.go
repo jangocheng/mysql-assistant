@@ -3,7 +3,6 @@ package handle_binlog
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 	"owen2020/app/apputil"
 	"owen2020/app/models"
 	"owen2020/conn"
@@ -94,7 +93,7 @@ func HandleEvent(e *replication.BinlogEvent) {
 		handleWriteRowsEventV1(e)
 	// 	return "WriteRowsEventV1"
 	case replication.UPDATE_ROWS_EVENTv1:
-		apputil.PrettyPrint(e)
+		//apputil.PrettyPrint(e)
 		handleUpdateEventV1(e)
 	// 	return "UpdateRowsEventV1"
 	case replication.DELETE_ROWS_EVENTv1:
@@ -145,15 +144,14 @@ func handleQueryEvent(e *replication.BinlogEvent) {
 	ev, _ := e.Event.(*replication.QueryEvent)
 	fmt.Println(ev)
 	if string(ev.Schema) == "" {
-		apputil.PrettyPrint(e)
-		fmt.Println("schema begin")
-		apputil.PrettyPrint(string(ev.Schema))
-		fmt.Println("schema end")
-		e.Dump(os.Stdout)
+		//apputil.PrettyPrint(e)
+		fmt.Println("event schema is empty")
+		//apputil.PrettyPrint(string(ev.Schema))
+		//fmt.Println("schema end")
+		//e.Dump(os.Stdout)
 		return
 	}
 	FlushDBTables(string(ev.Schema))
-	apputil.PrettyPrint(DBTables)
 }
 func handleUpdateEventV1(e *replication.BinlogEvent) {
 	ev, _ := e.Event.(*replication.RowsEvent)
@@ -161,6 +159,7 @@ func handleUpdateEventV1(e *replication.BinlogEvent) {
 	tableName := string(ev.Table.Table)
 	ok := FilterTable(dbName, tableName)
 	if !ok {
+		fmt.Println("skip update", dbName, ".", tableName)
 		return
 	}
 	var streams []models.DddEventStream
@@ -218,6 +217,7 @@ func handleWriteRowsEventV1(e *replication.BinlogEvent) {
 	tableName := string(ev.Table.Table)
 	ok := FilterTable(dbName, tableName)
 	if !ok {
+		fmt.Println("skip write", dbName, ".", tableName)
 		return
 	}
 
@@ -259,6 +259,7 @@ func handleDeleteRowsEventV1(e *replication.BinlogEvent) {
 	tableName := string(ev.Table.Table)
 	ok := FilterTable(dbName, tableName)
 	if !ok {
+		fmt.Println("skip delete", dbName, ".", tableName)
 		return
 	}
 

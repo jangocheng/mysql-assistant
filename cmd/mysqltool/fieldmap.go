@@ -20,7 +20,7 @@ func GetFieldMap(db string, table string) map[int]string {
 	sql := "show EXTENDED FULL FIELDS from `" + table + "` from `" + db + "`"
 	// sql := "show FULL COLUMNS from `" + table + "` from `" + db + "`"
 
-	engine := conn.GetXormWithLog()
+	engine := conn.GetSyncerGorm()
 	results, err := engine.QueryString(sql)
 	if err != nil {
 		log.Fatal(err)

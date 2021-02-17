@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"fmt"
 	"owen2020/app/models"
 	"owen2020/app/models/dao"
 	"owen2020/app/resp/out"
@@ -17,6 +18,7 @@ type menuItem struct {
 
 //GetSideBarTree 获取无限级菜单
 func GetSideBarTree(c *gin.Context) {
+	fmt.Println("get sidebar tree")
 	list := dao.GetMenuList()
 	ml := menuList(list)
 	//ret := processToTree(list, 0, 0)
