@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"log"
 	"os/exec"
+	"owen2020/app/apputil"
+	"owen2020/app/models/dao"
+	"owen2020/conn"
 	"runtime"
 
 	"github.com/urfave/cli/v2"
@@ -16,6 +19,9 @@ import (
 // https://siongui.github.io/2016/01/30/go-pretty-print-variable/
 
 func Dev(c *cli.Context) error {
+	// 初始化event数据库链接池
+	conn.InitEventGormPool()
+
 	// gorm := conn.GetDefaultGorm()
 	// mysqlutil.GetMysqlPosition()
 	// apputil.PrettyPrint(dbs)
@@ -35,7 +41,9 @@ func Dev(c *cli.Context) error {
 	// fmt.Println(err)
 	// tables := binlog.GetTableNames("codeper")
 
-	// apputil.PrettyPrint(tables)
+	list, _ := dao.GetStateClassList()
+	apputil.PrettyPrint(list)
+	apputil.PrettyPrint("aaa")
 	return nil
 }
 

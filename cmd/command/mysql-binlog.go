@@ -62,6 +62,9 @@ func StartBinlogClient(c *cli.Context) error {
 	// 初始化event数据库链接池
 	conn.InitEventGormPool()
 	//初始化 - 需要检查状态变更正确的数据
+	if true {
+		handle_binlog.InitStates()
+	}
 
 
 	// 初始化 binlog数据库同步配置

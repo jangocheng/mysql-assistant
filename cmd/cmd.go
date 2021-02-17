@@ -1,9 +1,12 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
+	"owen2020/app/apputil/foundations"
+	"path/filepath"
 
 	"owen2020/cmd/command"
 
@@ -16,29 +19,14 @@ import (
 // Flags 配置是全局的， 如指定.env配置，   指定单独的配置项等
 func main() {
 	dir, _ := os.Getwd()
-	// parent := filepath.Dir(dir)
-	fmt.Println(dir)
-	err := godotenv.Load(dir + "/.env")
+	rootDir, err := getRootDir(dir)
+	fmt.Println(rootDir)
+	err = godotenv.Load(rootDir + "/.env")
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
 
 	app := &cli.App{
-		// Flags: []cli.Flag{
-		// &cli.StringFlag{
-		// 	Name:    "lang",
-		// 	Aliases: []string{"l"},
-		// 	Value:   "english",
-		// 	Usage:   "Language for the greeting",
-		// },
-		// &cli.StringFlag{
-		// 	Name:  "env",
-		// 	Value: "../.env",
-		// 	// Aliases: []string{"c"},
-		// 	Usage:       "specify env file",
-		// 	Destination: &envFile,
-		// },
-		// },
 		Commands: []*cli.Command{
 			{
 				Name:    "dev",
@@ -60,16 +48,6 @@ func main() {
 				},
 			},
 			{
-				Name:   "canal-start",
-				Usage:  "启动canal客户端",
-				Action: command.CanalClient,
-			},
-			{
-				Name:   "open-browser",
-				Usage:  "打开浏览器",
-				Action: command.OpenBrowser,
-			},
-			{
 				Name:   "web-start",
 				Usage:  "启动web服务器",
 				Action: command.StartWebServer,
@@ -81,4 +59,16 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func getRootDir(dir string) (string, error) {
+	if dir == "" {
+		return "", errors.New("未能定位根目录")
+	}
+
+	if foundations.CheckFileIsExist(dir + "/.env") {
+		return dir, nil
+	}
+
+	return getRootDir(filepath.Dir(dir))
 }
