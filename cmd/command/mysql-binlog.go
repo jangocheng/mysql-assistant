@@ -3,6 +3,7 @@ package command
 import (
 	"context"
 	"fmt"
+	"os"
 	"owen2020/app/apputil"
 	"owen2020/cmd/command/handle_binlog"
 	"owen2020/cmd/command/mysqlutil"
@@ -62,10 +63,13 @@ func StartBinlogClient(c *cli.Context) error {
 	// 初始化event数据库链接池
 	conn.InitEventGormPool()
 	//初始化 - 需要检查状态变更正确的数据
-	if true {
-		handle_binlog.InitStates()
+	if os.Getenv("ENABLE_CHECK_STATE") == "yes" {
+		handle_binlog.InitState()
 	}
-
+	fmt.Println("StateClasses")
+	apputil.PrettyPrint(handle_binlog.StateClasses)
+	fmt.Println("StateClassDirections")
+	apputil.PrettyPrint(handle_binlog.StateClassDirections)
 
 	// 初始化 binlog数据库同步配置
 	cfg := replication.BinlogSyncerConfig{

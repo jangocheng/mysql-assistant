@@ -3,9 +3,10 @@ package command
 import (
 	"fmt"
 	"log"
+	"os"
 	"os/exec"
 	"owen2020/app/apputil"
-	"owen2020/app/models/dao"
+	"owen2020/cmd/command/handle_binlog"
 	"owen2020/conn"
 	"runtime"
 
@@ -21,29 +22,21 @@ import (
 func Dev(c *cli.Context) error {
 	// 初始化event数据库链接池
 	conn.InitEventGormPool()
+	handle_binlog.InitState()
+	apputil.PrettyPrint(handle_binlog.StateClasses)
+	apputil.PrettyPrint(handle_binlog.StateClassDirections)
 
-	// gorm := conn.GetDefaultGorm()
-	// mysqlutil.GetMysqlPosition()
-	// apputil.PrettyPrint(dbs)
+	ok, err := handle_binlog.CheckClassDirection(1, 1, 2)
+	apputil.PrettyPrint(ok)
+	apputil.PrettyPrint(err)
+	ok, err = handle_binlog.CheckClassDirection(2, 1, 2)
+	apputil.PrettyPrint(ok)
+	fmt.Println(err)
+	ok, err = handle_binlog.CheckClassDirection(1, 100, 2)
+	apputil.PrettyPrint(ok)
+	fmt.Println(err)
 
-	// for _, db := range dbs {
-	// 	tables := handle_binlog.GetTableNames(gorm, db)
-	// 	apputil.PrettyPrint(tables)
-	// }
-
-	// apputil.PrettyPrint(config.GetServers())
-	// binlog.FlushTableIdentifierNameMap("codeper", "user")
-	// binlog.InitDBTables("codeper")
-
-	// apputil.PrettyPrint(binlog.DBTables)
-	// ok, err := regexp.Match(filter, []byte("codeper"+"."+"user"))
-	// fmt.Println(ok)
-	// fmt.Println(err)
-	// tables := binlog.GetTableNames("codeper")
-
-	list, _ := dao.GetStateClassList()
-	apputil.PrettyPrint(list)
-	apputil.PrettyPrint("aaa")
+	fmt.Println(os.Getenv("ENABLE_CHECK_STATE"))
 	return nil
 }
 

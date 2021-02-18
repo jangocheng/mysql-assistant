@@ -3,6 +3,7 @@ package handle_binlog
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"owen2020/app/apputil"
 	"owen2020/app/models"
 	"owen2020/conn"
@@ -10,6 +11,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
 	"xorm.io/core"
 
 	"github.com/siddontang/go-mysql/replication"
@@ -95,6 +97,7 @@ func HandleEvent(e *replication.BinlogEvent) {
 	case replication.UPDATE_ROWS_EVENTv1:
 		//apputil.PrettyPrint(e)
 		handleUpdateEventV1(e)
+		//e.Dump(os.Stdout)
 	// 	return "UpdateRowsEventV1"
 	case replication.DELETE_ROWS_EVENTv1:
 		// apputil.PrettyPrint(e)
@@ -142,7 +145,6 @@ func HandleEvent(e *replication.BinlogEvent) {
 
 func handleQueryEvent(e *replication.BinlogEvent) {
 	ev, _ := e.Event.(*replication.QueryEvent)
-	fmt.Println(ev)
 	if string(ev.Schema) == "" {
 		//apputil.PrettyPrint(e)
 		fmt.Println("event schema is empty")
@@ -178,24 +180,36 @@ func handleUpdateEventV1(e *replication.BinlogEvent) {
 		next := i + 1
 		tableSchema := DBTables[string(ev.Table.Schema)+"."+string(ev.Table.Table)]
 		for idx, value := range ev.Rows[i] {
-			// fmt.Println("i = ", idx)
-			// fmt.Println("name = ", tableSchema[idx])
-			// fmt.Println("value = ", value)
-			// fmt.Printf("%+v", ev.Rows[next][idx])
-			// fmt.Println()
-			// fmt.Printf("%+T", ev.Rows[next][idx])
-			// fmt.Println()
-			allColumns = append(allColumns, tableSchema[idx])
+			fieldName := tableSchema[idx]
+			allColumns = append(allColumns, fieldName)
 
 			// go类型断言
 			// https://www.jianshu.com/p/787cf3a41ccb
 			// mysql 反回字段interface类型， 获取value参考
 			// /Users/owen/go/pkg/mod/github.com/go-xorm/xorm@v0.7.9/session_query.go
 			if !cmp.Equal(value, ev.Rows[next][idx]) {
-				updatedColumns = append(updatedColumns, tableSchema[idx])
+				updatedColumns = append(updatedColumns, fieldName)
 				//strValue := fmt.Sprintf("%s", ev.Rows[next][idx])
 				strValue := getValueString(ev.Rows[next][idx])
-				updatedData[tableSchema[idx]] = strValue
+				updatedData[fieldName] = strValue
+
+				// 校验状态流
+				if os.Getenv("ENABLE_CHECK_STATE") == "yes" {
+					go func(rowValue, NextValue interface{}) {
+						classId, err := GetClassId(dbName, tableName, fieldName)
+						if nil != err {
+							fmt.Println(dbName, tableName, fieldName, err)
+						} else {
+							from := int(rowValue.(int8))
+							to := int(NextValue.(int8))
+							check, err := CheckClassDirection(classId, from, to)
+							if !check {
+								fmt.Println(dbName, tableName, fieldName, "classId:", classId, "from:", from, "to:", to, err)
+							}
+						}
+					}(value, ev.Rows[next][idx])
+				}
+
 			}
 		}
 
@@ -209,6 +223,7 @@ func handleUpdateEventV1(e *replication.BinlogEvent) {
 	}
 	gorm := conn.GetEventGorm()
 	gorm.Table("ddd_event_stream").Create(&streams)
+
 }
 
 func handleWriteRowsEventV1(e *replication.BinlogEvent) {
