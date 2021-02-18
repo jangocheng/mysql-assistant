@@ -43,8 +43,7 @@ func StartBinlogClient(c *cli.Context) error {
 	username := c.String("username")
 	password := c.String("password")
 
-	filter := c.String("filter")
-	fmt.Println(filter)
+	handle_binlog.Filter = c.String("filter")
 	fmt.Println(handle_binlog.Filter)
 
 	// 初始化sync数据库连接池
@@ -52,13 +51,8 @@ func StartBinlogClient(c *cli.Context) error {
 	// 取出所有库表的字段ID对应的字段名
 	// 初始化所有库.表的字段ID对应字段名
 	handle_binlog.InitDBTables()
-	fmt.Println()
-	apputil.PrettyPrint("begin print db tables")
-	fmt.Println()
+	fmt.Println("db tables")
 	apputil.PrettyPrint(handle_binlog.DBTables)
-	fmt.Println()
-	apputil.PrettyPrint("end print db tables")
-	fmt.Println()
 
 	// 初始化event数据库链接池
 	conn.InitEventGormPool()
