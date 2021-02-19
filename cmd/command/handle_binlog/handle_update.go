@@ -80,7 +80,7 @@ func handleUpdateEventV1(e *replication.BinlogEvent) {
 
 				fmt.Println(StatisticsDayData)
 				fmt.Println(statLastUpdateTime)
-				fmt.Println(statModifyTimes)
+				fmt.Println(statEventTimes)
 				//apputil.PrettyPrint(StatisticsDayData)
 			}
 		}

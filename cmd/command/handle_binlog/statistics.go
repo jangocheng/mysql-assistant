@@ -3,9 +3,11 @@ package handle_binlog
 import (
 	"errors"
 	"fmt"
+	"os"
 	"owen2020/app/models"
 	"owen2020/app/models/dao"
 	"owen2020/conn"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -17,7 +19,7 @@ type MySyncMap struct {
 var StatisticsRules map[string]int = make(map[string]int)
 var StatisticsDayData MySyncMap
 
-var statModifyTimes int
+var statEventTimes int
 var statLastUpdateTime time.Time
 
 const (
@@ -81,14 +83,19 @@ func StatIncrease(dbName string, tableName string, fieldName string, eventType i
 
 	StatisticsDayData.Store(dayKey, dayData)
 
-	statModifyTimes += times
+	statEventTimes += times
 	if needUpdate() {
 		storeToDb()
 	}
 }
 
 func needUpdate() bool {
-	if statModifyTimes > 2 {
+	eventThreshold := 500
+	envTimes := os.Getenv("DATA_STATISTICS_EVENT_TIMES")
+	if envTimes != "" {
+		eventThreshold, _ = strconv.Atoi(envTimes)
+	}
+	if statEventTimes > eventThreshold {
 		return true
 	}
 
@@ -96,7 +103,13 @@ func needUpdate() bool {
 		return false
 	}
 
-	if time.Now().Unix()-statLastUpdateTime.Unix() > 300 {
+	var durationThreshold int64 = 300
+	envDuration := os.Getenv("DATA_STATISTICS_FLUSH_DURATION")
+	if envDuration != "" {
+		durationThreshold, _ = strconv.ParseInt(envDuration, 10, 64)
+	}
+
+	if time.Now().Unix()-statLastUpdateTime.Unix() > durationThreshold {
 		return true
 	}
 
@@ -125,18 +138,9 @@ func storeToDb() {
 	}
 	StatisticsDayData.Range(f)
 
-	statModifyTimes = 0
+	statEventTimes = 0
 	statLastUpdateTime = time.Now()
 }
-
-//func Decrease(dbName string, tableName string, fieldName string, eventType string, times int) {
-//	now := time.Now()
-//	dayKey := GetDayKey(dbName, tableName, fieldName, now)
-//	_, ok := StatisticsDayData[dayKey]
-//	if !ok {
-//		StatisticsDayData[dayKey] = solveStatisticsDayData(dbName, tableName, fieldName, now)
-//	}
-//}
 
 func GetDayKey(dbName string, tableName string, fieldName string, now time.Time) string {
 	date := now.Format("20060102")
