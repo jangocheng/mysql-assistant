@@ -3,12 +3,12 @@ package command
 import (
 	"fmt"
 	"log"
-	"os"
 	"os/exec"
 	"owen2020/app/apputil"
 	"owen2020/cmd/command/handle_binlog"
 	"owen2020/conn"
 	"runtime"
+	"time"
 
 	"github.com/urfave/cli/v2"
 )
@@ -20,23 +20,14 @@ import (
 // https://siongui.github.io/2016/01/30/go-pretty-print-variable/
 
 func Dev(c *cli.Context) error {
+
 	// 初始化event数据库链接池
 	conn.InitEventGormPool()
-	handle_binlog.InitState()
-	apputil.PrettyPrint(handle_binlog.StateClasses)
-	apputil.PrettyPrint(handle_binlog.StateClassDirections)
 
-	ok, err := handle_binlog.CheckClassDirection(1, 1, 2)
-	apputil.PrettyPrint(ok)
-	apputil.PrettyPrint(err)
-	ok, err = handle_binlog.CheckClassDirection(2, 1, 2)
-	apputil.PrettyPrint(ok)
-	fmt.Println(err)
-	ok, err = handle_binlog.CheckClassDirection(1, 100, 2)
-	apputil.PrettyPrint(ok)
-	fmt.Println(err)
+	handle_binlog.InitStatisticsRules()
+	apputil.PrettyPrint(handle_binlog.StatisticsRules)
 
-	fmt.Println(os.Getenv("ENABLE_CHECK_STATE"))
+	fmt.Println( time.Now().Unix() )
 	return nil
 }
 

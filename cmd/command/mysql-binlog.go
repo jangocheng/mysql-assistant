@@ -60,10 +60,17 @@ func StartBinlogClient(c *cli.Context) error {
 	if os.Getenv("ENABLE_CHECK_STATE") == "yes" {
 		handle_binlog.InitState()
 	}
+	//初始化 - 统计数据的规则
+	if os.Getenv("ENABLE_DATA_STATISTICS") == "yes" {
+		handle_binlog.InitStatisticsRules()
+	}
+
 	fmt.Println("StateClasses")
 	apputil.PrettyPrint(handle_binlog.StateClasses)
 	fmt.Println("StateClassDirections")
 	apputil.PrettyPrint(handle_binlog.StateClassDirections)
+	fmt.Println("Statistics Rules")
+	apputil.PrettyPrint(handle_binlog.StatisticsRules)
 
 	// 初始化 binlog数据库同步配置
 	cfg := replication.BinlogSyncerConfig{

@@ -21,6 +21,11 @@ func handleUpdateEventV1(e *replication.BinlogEvent) {
 		fmt.Println("skip update", dbName, ".", tableName)
 		return
 	}
+
+	if os.Getenv("ENABLE_DATA_STATISTICS") == "yes" {
+		StatIncrease(dbName, tableName, "", UPDATE, 1)
+	}
+
 	var streams []models.DddEventStream
 
 	stream := &models.DddEventStream{}
@@ -68,6 +73,15 @@ func handleUpdateEventV1(e *replication.BinlogEvent) {
 						}
 					}(value, ev.Rows[next][idx])
 				}
+
+				if os.Getenv("ENABLE_DATA_STATISTICS") == "yes" {
+					StatIncrease(dbName, tableName, fieldName, UPDATE, 1)
+				}
+
+				fmt.Println(StatisticsDayData)
+				fmt.Println(statLastUpdateTime)
+				fmt.Println(statModifyTimes)
+				//apputil.PrettyPrint(StatisticsDayData)
 			}
 		}
 
@@ -81,6 +95,10 @@ func handleUpdateEventV1(e *replication.BinlogEvent) {
 	}
 	gorm := conn.GetEventGorm()
 	gorm.Table("ddd_event_stream").Create(&streams)
+}
+
+func checkStateDirection(dbName string, tableName string, fieldName string, rowValue interface{}, NextValue interface{}) {
+
 }
 
 func saveStateAbnormal(dbName string, tableName string, fieldName string, stateFrom string, stateTo string) {

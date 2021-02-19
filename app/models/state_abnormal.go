@@ -2,7 +2,6 @@ package models
 
 type StateAbnormal struct {
 	StateAbnormalId int       `xorm:"not null pk autoincr INT(11)"`
-	AbnormalType    int       `xorm:"default 0 INT(11)"`
 	EventType       int       `xorm:"default 0 INT(11)"`
 	DbName          string    `xorm:"default '' VARCHAR(255)"`
 	TableName       string    `xorm:"default '' VARCHAR(255)"`

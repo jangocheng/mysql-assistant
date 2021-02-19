@@ -20,7 +20,7 @@ func InitStateClass() {
 	list, _ := dao.GetStateClassList()
 
 	for _, v := range list {
-		key := GetClassKey(v.DbName, v.TableName, v.FieldName)
+		key := GetKey(v.DbName, v.TableName, v.FieldName)
 		value := v.StateClassId
 		StateClasses[key] = value
 	}
@@ -80,7 +80,7 @@ func CheckDirection(dbName string, tableName string, fieldName string, from int,
 }
 
 func GetClassId(dbName string, tableName string, fieldName string) (int, error) {
-	key := GetClassKey(dbName, tableName, fieldName)
+	key := GetKey(dbName, tableName, fieldName)
 	classId, ok := StateClasses[key]
 	if !ok {
 		return 0, errors.New("state class not defined")
@@ -89,6 +89,6 @@ func GetClassId(dbName string, tableName string, fieldName string) (int, error) 
 	return classId, nil
 }
 
-func GetClassKey(dbName string, tableName string, fieldName string) string {
-	return dbName + "." + tableName + "." + fieldName
+func GetKey(dbName string, tableName string, fieldName string) string {
+	return dbName + "_" + tableName + "_" + fieldName
 }
