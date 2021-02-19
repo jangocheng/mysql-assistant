@@ -80,10 +80,8 @@ func StatIncrease(dbName string, tableName string, fieldName string, eventType i
 	}
 
 	StatisticsDayData.Store(dayKey, dayData)
+
 	statModifyTimes += times
-
-	StatisticsDayData.Print(dayKey)
-
 	if needUpdate() {
 		storeToDb()
 	}
@@ -117,6 +115,12 @@ func storeToDb() {
 		} else {
 			gorm.Table("statistics_day").Save(dayData)
 		}
+
+		// 从map中删除过期数据
+		if time.Now().Unix()-time.Time(dayData.StatisticsDay).Unix() > 86400 {
+			StatisticsDayData.Delete(k)
+		}
+
 		return true
 	}
 	StatisticsDayData.Range(f)

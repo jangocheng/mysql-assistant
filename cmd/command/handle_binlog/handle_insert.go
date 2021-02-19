@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/siddontang/go-mysql/replication"
+	"os"
 	"owen2020/app/models"
 	"owen2020/conn"
 	"strings"
@@ -17,6 +18,10 @@ func handleWriteRowsEventV1(e *replication.BinlogEvent) {
 	if !ok {
 		fmt.Println("skip write", dbName, ".", tableName)
 		return
+	}
+
+	if os.Getenv("ENABLE_DATA_STATISTICS") == "yes" {
+		StatIncrease(dbName, tableName, "", INSERT, 1)
 	}
 
 	var streams []models.DddEventStream
