@@ -176,8 +176,9 @@ func (s sortStreams) process() {
 
 func processValues(jsonStr string) string {
 	jmap := make(map[string]string)
-	err := json.Unmarshal([]byte(jsonStr), jmap)
+	err := json.Unmarshal([]byte(jsonStr), &jmap)
 	if err != nil {
+		fmt.Print(err)
 		return ""
 	}
 	str := ""
