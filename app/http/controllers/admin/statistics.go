@@ -2,6 +2,7 @@ package admin
 
 import (
 	"github.com/gin-gonic/gin"
+	"owen2020/app/apputil"
 	"owen2020/app/models"
 	"owen2020/app/reqt"
 	"owen2020/app/resp/out"
@@ -33,6 +34,24 @@ func GetStatisticRuleList(c *gin.Context) {
 	}
 
 	out.NewSuccess(gin.H{"total": total, "rows": list}).JSONOK(c)
+}
+
+func AddStatisticsRule(c *gin.Context) {
+	info := models.StatisticsRule{}
+
+	err := apputil.ShouldBindOrError(c, &info)
+	if err != nil {
+		return
+	}
+
+	db := conn.GetEventGorm()
+	err = db.Table("statistics_rule").Create(&info).Error
+	if err != nil {
+		out.NewError(800, err.Error()).JSONOK(c)
+		return
+	}
+
+	out.NewSuccess(info).JSONOK(c)
 }
 
 func DeleteStatisticRule(c *gin.Context) {

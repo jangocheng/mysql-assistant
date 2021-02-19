@@ -35,7 +35,7 @@ func CreateToken(c *gin.Context) {
 	}
 
 	// 设置cookie
-	c.SetCookie("AdminAuthorization", tokenString, 1000, "/", c.Request.Host, false, true)
+	c.SetCookie("AdminAuthorization", tokenString, 86400, "/", c.Request.Host, false, true)
 
 	// 如果是ajax，不需要跳转，直接输出结果
 	if strings.EqualFold(c.Request.Header.Get("X-Requested-With"), "XMLHttpRequest") {

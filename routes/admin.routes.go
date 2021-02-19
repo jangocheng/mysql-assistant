@@ -27,6 +27,13 @@ func adminRoute(router *gin.Engine) {
 	{
 		// 菜单列表
 		adminAPI.GET("/menu", admin.GetMenuList)
+		adminAPI.GET("/menu/:id", admin.GetMenuInfo)
+		adminAPI.POST("/menu", admin.AddMenu)
+		adminAPI.POST("/menu/:id", admin.EditMenu)
+		adminAPI.DELETE("/menu/:id", admin.DeleteMenu)
+
+		adminAPI.GET("/MenuTree", admin.GetMenuSelectList)
+
 	}
 
 	// 数据模型相关
@@ -62,6 +69,7 @@ func adminRoute(router *gin.Engine) {
 	{
 		adminAPI.GET("/state_class", admin.GetStateClassList)
 		adminAPI.GET("/state_class/:id", admin.GetStateClassInfo)
+		adminAPI.POST("/state_class", admin.AddStateClass)
 		adminAPI.POST("/state_class/:id", admin.EditStateClass)
 		adminAPI.DELETE("/state_class/:id", admin.DeleteStatClass)
 
@@ -81,6 +89,7 @@ func adminRoute(router *gin.Engine) {
 	// 统计相关
 	{
 		adminAPI.GET("/statistics_rule", admin.GetStatisticRuleList)
+		adminAPI.POST("/statistics_rule", admin.AddStatisticsRule)
 		adminAPI.DELETE("/statistics_rule/:id", admin.DeleteStatisticRule)
 
 		adminAPI.GET("/statistics_day", admin.GetStatisticDayList)

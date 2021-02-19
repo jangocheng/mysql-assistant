@@ -67,6 +67,25 @@ func GetStateInfo(c *gin.Context) {
 	out.NewSuccess(info).JSONOK(c)
 }
 
+//AddStateClass 添加
+func AddStateClass(c *gin.Context) {
+	info := models.StateClass{}
+
+	err := apputil.ShouldBindOrError(c, &info)
+	if err != nil {
+		return
+	}
+
+	db := conn.GetEventGorm()
+	err = db.Table("state_class").Create(&info).Error
+	if err != nil {
+		out.NewError(800, err.Error()).JSONOK(c)
+		return
+	}
+
+	out.NewSuccess(info).JSONOK(c)
+}
+
 //EditStateClass 编辑
 func EditStateClass(c *gin.Context) {
 	id := c.Param("id")
@@ -89,6 +108,7 @@ func EditStateClass(c *gin.Context) {
 
 	out.NewSuccess(info).JSONOK(c)
 }
+
 func EditState(c *gin.Context) {
 	id := c.Param("id")
 

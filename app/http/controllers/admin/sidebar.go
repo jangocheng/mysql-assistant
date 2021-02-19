@@ -1,14 +1,14 @@
 package admin
 
 import (
-	"fmt"
+	"github.com/gin-gonic/gin"
 	"owen2020/app/models"
 	"owen2020/app/models/dao"
 	"owen2020/app/resp/out"
-
-	"github.com/gin-gonic/gin"
+	"strings"
 )
 
+// 左侧菜单树
 type menuList []models.Menu
 
 type menuItem struct {
@@ -16,9 +16,19 @@ type menuItem struct {
 	Child []menuItem `json:"_child"`
 }
 
+// 左侧菜单树 -end
+
+// 菜单选择列表
+type menuSelectItem struct {
+	models.Menu
+	Level     int    `json:"level"`
+	TitleShow string `json:"title_show"`
+}
+
+// 菜单选择列表 -end
+
 //GetSideBarTree 获取无限级菜单
 func GetSideBarTree(c *gin.Context) {
-	fmt.Println("get sidebar tree")
 	list := dao.GetMenuList()
 	ml := menuList(list)
 	//ret := processToTree(list, 0, 0)
@@ -27,22 +37,22 @@ func GetSideBarTree(c *gin.Context) {
 }
 
 func (m *menuList) processToTree(pid int, level int) []menuItem {
-	var menuTree []menuItem
+	var mTree []menuItem
 	if level == 10 {
-		return menuTree
+		return mTree
 	}
 
 	list := m.findChildren(pid)
 	if len(list) == 0 {
-		return menuTree
+		return mTree
 	}
 
 	for _, v := range list {
 		child := m.processToTree(v.MenuId, level+1)
-		menuTree = append(menuTree, menuItem{v, child})
+		mTree = append(mTree, menuItem{v, child})
 	}
 
-	return menuTree
+	return mTree
 }
 
 func (m *menuList) findChildren(pid int) []models.Menu {
@@ -55,6 +65,50 @@ func (m *menuList) findChildren(pid int) []models.Menu {
 	}
 	return child
 }
+
+// 关于子结构体转父结构体的说明
+//https://stackoverflow.com/questions/46989247/how-to-convert-parent-type-to-child-type
+func (m menuItem) ConvertToMenu() models.Menu {
+	menu := models.Menu{}
+
+	menu.MenuId = m.MenuId
+	menu.Title = m.Title
+	menu.Pid = m.Pid
+	menu.Sort = m.Sort
+	menu.Hide = m.Hide
+	menu.Pathname = m.Pathname
+	menu.Iconfont = m.Iconfont
+	menu.CreatedAt = m.CreatedAt
+	menu.UpdatedAt = m.UpdatedAt
+	menu.IsDeleted = m.IsDeleted
+	menu.DeletedAt = m.DeletedAt
+
+	return menu
+}
+
+// -- 菜单选择列表 --
+func TreeToSelect(msP *[]menuSelectItem, mt []menuItem, level int) {
+	for _, v := range mt {
+		prefixStr := strings.Repeat("&nbsp;", level*2)
+		prefixStr += "└"
+		showTitle := prefixStr + v.Menu.Title
+		item := menuSelectItem{v.ConvertToMenu(), level, showTitle}
+		*msP = append(*msP, item)
+		if len(v.Child) > 0 {
+			TreeToSelect(msP, v.Child, level+1)
+		}
+	}
+}
+
+//
+//func menuTreeToSelect(tree []models.Menu, level int) {
+//	for _, v := range tree {
+//		prefixStr := strings.Repeat("&nbsp;", level*2)
+//		prefixStr += "└"
+//		item := menuSelectItem{v, level, prefixStr + v.Title}
+//
+//	}
+//}
 
 //func processToTree(menuList []models.Menu, pid int, level int) []menuTreeType {
 //	var menuTree []menuTreeType
