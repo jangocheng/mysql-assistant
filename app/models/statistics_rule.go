@@ -1,12 +1,12 @@
 package models
 
 type StatisticsRule struct {
-	StatisticsRuleId int       `xorm:"not null pk autoincr INT(11)"`
-	DbName           string    `xorm:"default '' VARCHAR(255)"`
-	TableName        string    `xorm:"default '' VARCHAR(255)"`
-	FieldName        string    `xorm:"default '' VARCHAR(255)"`
-	IsDeleted        int       `xorm:"default 0 TINYINT(4)"`
-	CreatedAt        DateTime `xorm:"default 'CURRENT_TIMESTAMP' DATETIME"`
-	UpdatedAt        DateTime `xorm:"default 'CURRENT_TIMESTAMP' DATETIME"`
-	DeletedAt        DateTime `xorm:"DATETIME"`
+	StatisticsRuleId int       `json:"statistics_rule_id"`
+	DbName           string    `json:"db_name"`
+	TableName        string    `json:"table_name"`
+	FieldName        string    `json:"field_name"`
+	IsDeleted        int       `json:"is_deleted"`
+	CreatedAt        DateTime `json:"created_at"`
+	UpdatedAt        DateTime `json:"updated_at"`
+	DeletedAt        DateTime `json:"deleted_at"`
 }

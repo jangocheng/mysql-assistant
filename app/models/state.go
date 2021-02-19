@@ -1,12 +1,12 @@
 package models
 
 type State struct {
-	CreatedAt      DateTime `xorm:"default 'CURRENT_TIMESTAMP' DATETIME"`
-	DeletedAt      DateTime `xorm:"DATETIME"`
-	IsDeleted      int       `xorm:"default 0 TINYINT(4)"`
-	StateClassId   int       `xorm:"INT(11)"`
-	StateId        int       `xorm:"not null pk autoincr INT(11)"`
-	StateValue     string    `xorm:"VARCHAR(255)"`
-	StateValueDesc string    `xorm:"VARCHAR(255)"`
-	UpdatedAt      DateTime `xorm:"DATETIME"`
+	StateId        int      `form:"state_id" json:"state_id"`
+	StateClassId   int      `form:"state_class_id" json:"state_class_id"`
+	StateValue     string   `form:"state_value" json:"state_value"`
+	StateValueDesc string   `form:"state_value_desc" json:"state_value_desc"`
+	IsDeleted      int      `form:"is_deleted" json:"is_deleted"`
+	CreatedAt      DateTime `form:"created_at" json:"created_at"`
+	UpdatedAt      DateTime `form:"updated_at" json:"updated_at"`
+	DeletedAt      DateTime `form:"deleted_at" json:"deleted_at"`
 }

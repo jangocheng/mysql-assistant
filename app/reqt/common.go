@@ -4,7 +4,7 @@ import "github.com/gin-gonic/gin"
 
 //PageParam 分页控制
 type PageParam struct {
-	PageNumber int `json:"pageNumber" form:"page,default=1"`
+	PageNumber int `json:"pageNumber" form:"pageNumber,default=1"`
 	PageSize   int `json:"pageSize" form:"pageSize,default=10"`
 }
 

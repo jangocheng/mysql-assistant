@@ -1,15 +1,15 @@
 package models
 
 type StateAbnormal struct {
-	StateAbnormalId int       `xorm:"not null pk autoincr INT(11)"`
-	EventType       int       `xorm:"default 0 INT(11)"`
-	DbName          string    `xorm:"default '' VARCHAR(255)"`
-	TableName       string    `xorm:"default '' VARCHAR(255)"`
-	FieldName       string    `xorm:"default '' VARCHAR(255)"`
-	StateFrom       string    `xorm:"VARCHAR(255)"`
-	StateTo         string    `xorm:"VARCHAR(255)"`
-	IsDeleted       int       `xorm:"default 0 TINYINT(4)"`
-	CreatedAt       DateTime `gorm:"autoUpdateTime;column:created_at;default:null" xorm:"default 'CURRENT_TIMESTAMP' DATETIME"`
-	UpdatedAt       DateTime `gorm:"autoUpdateTime;column:updated_at;default:null" xorm:"default 'CURRENT_TIMESTAMP' DATETIME"`
-	DeletedAt       DateTime `xorm:"DATETIME"`
+	StateAbnormalId int       `json:"state_abnormal_id"`
+	EventType       int       `json:"event_type"`
+	DbName          string    `json:"db_name"`
+	TableName       string    `json:"table_name"`
+	FieldName       string    `json:"field_name"`
+	StateFrom       string    `json:"state_from"`
+	StateTo         string    `json:"state_to"`
+	IsDeleted       int       `json:"is_deleted"`
+	CreatedAt       DateTime `json:"created_at" gorm:"autoUpdateTime;column:created_at;default:null"`
+	UpdatedAt       DateTime `json:"updated_at" gorm:"autoUpdateTime;column:updated_at;default:null" xorm:"default 'CURRENT_TIMESTAMP' DATETIME"`
+	DeletedAt       DateTime `json:"deleted_at" xorm:"DATETIME"`
 }
