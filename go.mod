@@ -3,7 +3,6 @@ module owen2020
 go 1.14
 
 require (
-	github.com/awalterschulze/gographviz v2.0.3+incompatible
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/emicklei/dot v0.15.0
 	github.com/fastly/go-utils v0.0.0-20180712184237-d95a45783239 // indirect
@@ -37,6 +36,7 @@ require (
 	github.com/urfave/cli/v2 v2.2.0
 	github.com/withlin/canal-go v1.0.10
 	golang.org/x/net v0.0.0-20201110031124-69a78807bb2b // indirect
+	golang.org/x/sys v0.0.0-20210220050731-9a76102bfb43 // indirect
 	golang.org/x/text v0.3.4 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
