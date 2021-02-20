@@ -44,7 +44,7 @@ func SetDirection(classId int, row models.StateDirection) {
 	StateClassDirections[classId] = append(StateClassDirections[classId], row)
 }
 
-func CheckClassDirection(classId int, from int, to int) (bool, error) {
+func CheckStatDirection(classId int, from string, to string) (bool, error) {
 	list, ok := StateClassDirections[classId]
 	if !ok {
 		return false, errors.New("state class direction not exist")
@@ -59,8 +59,8 @@ func CheckClassDirection(classId int, from int, to int) (bool, error) {
 	return false, errors.New("direction not defined")
 }
 
-func CheckDirection(dbName string, tableName string, fieldName string, from int, to int) (bool, error) {
-	classId, err := GetClassId(dbName, tableName, fieldName)
+func CheckDirection(dbName string, tableName string, fieldName string, from string, to string) (bool, error) {
+	classId, err := GetStatClassId(dbName, tableName, fieldName)
 	if nil != err {
 		return false, errors.New("state class not defined")
 	}
@@ -79,7 +79,7 @@ func CheckDirection(dbName string, tableName string, fieldName string, from int,
 	return false, errors.New("direction not exist")
 }
 
-func GetClassId(dbName string, tableName string, fieldName string) (int, error) {
+func GetStatClassId(dbName string, tableName string, fieldName string) (int, error) {
 	key := GetKey(dbName, tableName, fieldName)
 	classId, ok := StateClasses[key]
 	if !ok {

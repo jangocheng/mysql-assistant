@@ -21,7 +21,7 @@ func handleWriteRowsEventV1(e *replication.BinlogEvent) {
 	}
 
 	if os.Getenv("ENABLE_DATA_STATISTICS") == "yes" {
-		StatIncrease(dbName, tableName, "", INSERT, 1)
+		StatisticsIncrease(dbName, tableName, "", INSERT, 1)
 	}
 
 	var streams []models.DddEventStream

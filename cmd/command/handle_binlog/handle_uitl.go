@@ -104,3 +104,42 @@ func getIntValue(a interface{}) (int, error) {
 		return 0, errors.New("type not support")
 	}
 }
+
+func getStringValue(a interface{}) (string, error) {
+	switch a.(type) {
+	case int8:
+		return strconv.FormatInt(int64(a.(int8)), 10), nil
+	case uint8: //byte
+		return strconv.FormatUint(uint64(a.(uint8)), 10), nil
+	case int16:
+		return strconv.FormatInt(int64(a.(int16)), 10), nil
+	case uint16:
+		return strconv.FormatUint(uint64(a.(uint16)), 10), nil
+	case int32: // rune
+		return strconv.FormatInt(int64(a.(int32)), 10), nil
+	case uint32:
+		return strconv.FormatUint(uint64(a.(uint32)), 10), nil
+	case int64:
+		return strconv.FormatInt(a.(int64), 10), nil
+	case uint64:
+		return strconv.FormatUint(a.(uint64), 10), nil
+	case int:
+		return strconv.Itoa(a.(int)), nil
+	case uint:
+		return strconv.FormatUint(uint64(a.(uint)), 10), nil
+	case float32:
+		return "", errors.New("type not support")
+	case float64:
+		return "", errors.New("type not support")
+	case complex64:
+		return "", errors.New("type not support")
+	case complex128:
+		return "", errors.New("type not support")
+	case uintptr:
+		return "", errors.New("type not support")
+	case string:
+		return a.(string), nil
+	default: // 其他类型有pointer， struct， array, slice ,map, interface, function, channel
+		return "", errors.New("type not support")
+	}
+}

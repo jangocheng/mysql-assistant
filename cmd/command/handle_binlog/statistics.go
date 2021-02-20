@@ -19,8 +19,8 @@ type MySyncMap struct {
 var StatisticsRules map[string]int = make(map[string]int)
 var StatisticsDayData MySyncMap
 
-var statEventTimes int
-var statLastUpdateTime time.Time
+var statisticsEventTimes int
+var statisticsLastUpdateTime time.Time
 
 const (
 	INSERT = 1 //iota
@@ -53,7 +53,7 @@ func GetRuleId(dbName string, tableName string, fieldName string) (int, error) {
 	return ruleId, nil
 }
 
-func StatIncrease(dbName string, tableName string, fieldName string, eventType int, times int) {
+func StatisticsIncrease(dbName string, tableName string, fieldName string, eventType int, times int) {
 	ruleID, _ := GetRuleId(dbName, tableName, fieldName)
 	if ruleID == 0 {
 		return
@@ -83,23 +83,23 @@ func StatIncrease(dbName string, tableName string, fieldName string, eventType i
 
 	StatisticsDayData.Store(dayKey, dayData)
 
-	statEventTimes += times
-	if needUpdate() {
-		storeToDb()
+	statisticsEventTimes += times
+	if statisticsNeedUpdate() {
+		statisticsStore()
 	}
 }
 
-func needUpdate() bool {
+func statisticsNeedUpdate() bool {
 	eventThreshold := 500
 	envTimes := os.Getenv("DATA_STATISTICS_EVENT_TIMES")
 	if envTimes != "" {
 		eventThreshold, _ = strconv.Atoi(envTimes)
 	}
-	if statEventTimes > eventThreshold {
+	if statisticsEventTimes > eventThreshold {
 		return true
 	}
 
-	if statLastUpdateTime.IsZero() {
+	if statisticsLastUpdateTime.IsZero() {
 		return false
 	}
 
@@ -109,14 +109,14 @@ func needUpdate() bool {
 		durationThreshold, _ = strconv.ParseInt(envDuration, 10, 64)
 	}
 
-	if time.Now().Unix()-statLastUpdateTime.Unix() > durationThreshold {
+	if time.Now().Unix()-statisticsLastUpdateTime.Unix() > durationThreshold {
 		return true
 	}
 
 	return false
 }
 
-func storeToDb() {
+func statisticsStore() {
 	gorm := conn.GetEventGorm()
 	f := func(k, v interface{}) bool {
 		//这个函数的入参、出参的类型都已经固定，不能修改
@@ -138,8 +138,9 @@ func storeToDb() {
 	}
 	StatisticsDayData.Range(f)
 
-	statEventTimes = 0
-	statLastUpdateTime = time.Now()
+	// 重置记数器
+	statisticsEventTimes = 0
+	statisticsLastUpdateTime = time.Now()
 }
 
 func GetDayKey(dbName string, tableName string, fieldName string, now time.Time) string {

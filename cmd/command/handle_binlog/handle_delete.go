@@ -21,7 +21,7 @@ func handleDeleteRowsEventV1(e *replication.BinlogEvent) {
 	}
 
 	if os.Getenv("ENABLE_DATA_STATISTICS") == "yes" {
-		StatIncrease(dbName, tableName, "", DELETE, 1)
+		StatisticsIncrease(dbName, tableName, "", DELETE, 1)
 	}
 
 	var streams []models.DddEventStream
