@@ -36,16 +36,18 @@ WRITE_ROWS_EVENT（增），UPDATE_ROWS_EVENT（改），DELETE_ROWS_EVENT（删
 
 时间推移功能迭代， 事件（接口）的操作有所变更，如增了新的字段等。 可对比同事件不同版本之间的数据异同
 
-
-
 ## 数据流与事件数据异同对比
 
 选择任意数据流和事件进行对比，和多版本事件对比功能相同。
 
 ## 异同对比图型展示
-<img src="./images/data_model_diff.jpg" width = "800" alt="model_diff" align=center />  
+数据模型详情展示   
 <img src="./images/data_model_effect.jpg" width = "800" alt="model_diff" align=center />  
+数据模型异同对比  
+<img src="./images/data_model_diff.jpg" width = "800" alt="model_diff" align=center />  
+数据模型异同对比 - 新增元素  
 <img src="./images/diff_update_column.jpg" width = "800" alt="model_diff" align=center />  
+数据模型异同对比 - 变更元素  
 <img src="./images/diff_update_value.jpg" width = "800" alt="model_diff" align=center />  
 
 ## 总结
