@@ -9,7 +9,7 @@ import (
 func GetStreamListByIds(ids []string) ([]models.DddEventStream, error) {
 	streamList := []models.DddEventStream{}
 	gorm := conn.GetEventGorm()
-	err := gorm.Table("ddd_event_stream").Where("ddd_event_stream_id in ?", ids).Group("db_name").Group("table_name").Find(&streamList).Error
+	err := gorm.Table("ddd_event_stream").Where("ddd_event_stream_id in ?", ids).Find(&streamList).Error
 
 	return streamList, err
 }
@@ -36,7 +36,7 @@ func GetStreamListByEventId(eventId string) ([]models.DddEventStream, error) {
 func GetStreamListByTransactionId(transactionId string) ([]models.DddEventStream, error) {
 	streamList := []models.DddEventStream{}
 	gorm := conn.GetEventGorm()
-	err := gorm.Table("ddd_event_stream").Where("transaction_tag = ?", transactionId).Group("db_name").Group("table_name").Find(&streamList).Error
+	err := gorm.Table("ddd_event_stream").Where("transaction_tag = ?", transactionId).Find(&streamList).Error
 
 	return streamList, err
 }

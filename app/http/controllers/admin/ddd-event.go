@@ -166,10 +166,14 @@ func (s sortStreams) process() {
 	// 处理Columns，UpdateColumns
 	// 处理update_value
 	for i, v := range s {
-		v.Columns = strings.ReplaceAll(v.Columns, ",", "\n")
-		v.UpdateColumns = strings.ReplaceAll(v.UpdateColumns, ",", "\n")
-
+		if v.Columns != "" {
+			v.Columns = strings.ReplaceAll(v.Columns, ",", "\n")
+		}
+		if v.UpdateColumns != "" {
+			v.UpdateColumns = strings.ReplaceAll(v.UpdateColumns, ",", "\n")
+		}
 		v.UpdateValue = processValues(v.UpdateValue)
+
 		s[i] = v
 	}
 }
