@@ -30,7 +30,7 @@ WRITE_ROWS_EVENT（增），UPDATE_ROWS_EVENT（改），DELETE_ROWS_EVENT（删
 
 把项目事件包含的库.表之间的关系以图的形式表现出来。 等同数据库管理工具如navicat,dbeaver等工具。
 
-<img src="./images/er.jpg" width = "500" alt="er-graph" align=center />
+<img src="./images/er.jpg" width = "800" alt="er-graph" align=center />
 
 ## 多版本事件数据异同对比
 
@@ -43,10 +43,10 @@ WRITE_ROWS_EVENT（增），UPDATE_ROWS_EVENT（改），DELETE_ROWS_EVENT（删
 选择任意数据流和事件进行对比，和多版本事件对比功能相同。
 
 ## 异同对比图型展示
-<img src="./images/data_model_diff.jpg" width = "500" alt="model_diff" align=center />
-<img src="./images/data_model_effect.jpg" width = "500" alt="model_diff" align=center />
-<img src="./images/diff_update_column.jpg" width = "500" alt="model_diff" align=center />
-<img src="./images/diff_update_value.jpg" width = "500" alt="model_diff" align=center />
+<img src="./images/data_model_diff.jpg" width = "800" alt="model_diff" align=center />  
+<img src="./images/data_model_effect.jpg" width = "800" alt="model_diff" align=center />  
+<img src="./images/diff_update_column.jpg" width = "800" alt="model_diff" align=center />  
+<img src="./images/diff_update_value.jpg" width = "800" alt="model_diff" align=center />  
 
 ## 总结
 
