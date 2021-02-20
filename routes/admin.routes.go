@@ -46,21 +46,19 @@ func adminRoute(router *gin.Engine) {
 		adminAPI.DELETE("/ddd_event/:id", admin.DeleteDddEvent)
 
 		// 事件添加
-		adminAPI.POST("ddd_event", admin.AddDddEvent)
+		adminAPI.POST("/ddd_event", admin.AddDddEvent)
 		// 事件编辑
-		adminAPI.POST("ddd_event/:id", admin.EditDddEvent)
+		adminAPI.POST("/ddd_event/:id", admin.EditDddEvent)
 
 		// 事件对比 diff
 		adminAPI.GET("/event_diff", admin.EventDiff)
 		adminAPI.GET("/event", admin.EventDiff)
 
 		// adminAPI.GET("/event/effect", admin.EventEffect)
-
 		// 数据流列表 完成
 		adminAPI.GET("/ddd_event_stream", admin.GetDddEventStreamList)
 		// 数据流删除 完成
 		adminAPI.DELETE("/ddd_event_stream/:id", admin.DeleteDddEventStream)
-
 		// er图 实体关系图 完成
 		adminAPI.GET("/ddd_er", admin.DddEr)
 	}
