@@ -6,9 +6,10 @@ import (
 	"owen2020/app/models/dao"
 )
 
-var StateClasses = make(map[string]int)
-
-var StateClassDirections = make(map[int][]models.StateDirection)
+var (
+	StateClasses = make(map[string]int)
+	StateClassDirections = make(map[int][]models.StateDirection)
+)
 
 func InitState() {
 	InitStateClass()

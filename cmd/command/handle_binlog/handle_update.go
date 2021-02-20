@@ -38,7 +38,7 @@ func updateRoutineModelStream(ev *replication.RowsEvent) {
 	tableSchema := DBTables[dbName+"."+tableName]
 
 	var streams []models.DddEventStream
-	stream := &models.DddEventStream{}
+	stream := models.DddEventStream{}
 	stream.DbName = dbName
 	stream.TableName = tableName
 	stream.TransactionTag = ""
@@ -71,10 +71,10 @@ func updateRoutineModelStream(ev *replication.RowsEvent) {
 		b, _ := json.Marshal(updatedData)
 		stream.UpdateValue = string(b)
 
-		streams = append(streams, *stream)
+		streams = append(streams, stream)
 	}
-	gorm := conn.GetEventGorm()
-	gorm.Table("ddd_event_stream").Create(&streams)
+
+	streamAddRows(streams)
 }
 
 func updateRoutineStatRule(ev *replication.RowsEvent) {

@@ -16,11 +16,15 @@ type MySyncMap struct {
 	sync.Map
 }
 
-var StatisticsRules map[string]int = make(map[string]int)
-var StatisticsDayData MySyncMap
+var (
+	StatisticsRules   map[string]int = make(map[string]int)
+	StatisticsDayData MySyncMap
+)
 
-var statisticsEventTimes int
-var statisticsLastUpdateTime time.Time
+var (
+	statisticsEventTimes     int
+	statisticsLastUpdateTime time.Time
+)
 
 const (
 	INSERT = 1 //iota
