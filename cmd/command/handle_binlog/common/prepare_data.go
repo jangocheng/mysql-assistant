@@ -11,7 +11,7 @@ var (
 )
 
 var (
-	StatisticsRules map[string]int = make(map[string]int)
+	StatisticsRules = make(map[string]int)
 )
 
 func InitStatisticsRules() {

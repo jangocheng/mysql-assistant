@@ -1,6 +1,4 @@
-# 项目数据模型管理系统
-# 出于操作友好性，mac windows linux 三个makefile 独立分开， make指定文件构建指定平台的程序。
-# 默认makefile 就针对下前机器构建就好。  其他开发者构建时，不会多余构建。
+# business data model manager system
 
 # 参考
 # 在 Golang 中开发中使用 Makefile
@@ -32,46 +30,70 @@ GOBUILD=$(GO) build
 GOCLEAN=$(GO) clean
 GOTEST=$(GO) test
 BINARY_PATH=./bin
-CMD_BINARY_NAME=$(BINARY_PATH)/start_up
+CMD_BINARY_NAME=$(BINARY_PATH)/business_data_model
+CMD_BINARY_UNIX=$(CMD_BINARY_NAME)_unix
 
 # make 不指定动作时，默认执行第一个动作
 default:build
 
+# 定义build，test，clean，run，deps动作 和build-linux， docker-build动作
 test:
 	$(GOTEST) -v
 clean:
 	$(GOCLEAN)
+#	rm -f $(CMD_BINARY_NAME)
+#	rm -f $(CMD_BINARY_UNIX)
 	rm -f $(BINARY_PATH)/*
 
 mod:
 	$(GO) mod tidy
 
-build: mod clean test build-local
+build: mod clean test build-mac build-windows build-linux-amd64
 	echo "build done"
 #	$(GOBUILD) -o $(CMD_BINARY_NAME) -v ./cmd/cmd.go
 #	shasum -a 256 $(CMD_BINARY_NAME)
 
-build-local:
-	export CGO_ENABLED=0
-	$(GOBUILD) -o $(CMD_BINARY_NAME) -v ./cmd/cmd.go
+# Cross compilation
+build-linux-amd64:
+	export CGO_ENABLED=0 GOOS=linux GOARCH=amd64
+	$(GOBUILD) -o $(CMD_BINARY_NAME)_linux -v ./cmd/cmd.go
+	#shasum -a 256 $(CMD_BINARY_NAME)_linux
+build-windows:
+	xgo --targets="windows/*" -dest=$(BINARY_PATH) ./cmd/
+	#export CGO_ENABLED=0 GOOS=windows GOARCH=386
+	#$(GOBUILD) -o $(CMD_BINARY_NAME)_windows.exe -v ./cmd/cmd.go
+	#shasum -a 256 $(CMD_BINARY_NAME)_windows
+build-mac:
+	export CGO_ENABLED=0 GOOS=darwin GOARCH=amd64
+	$(GOBUILD) -o $(CMD_BINARY_NAME)_mac -v ./cmd/cmd.go
 	#shasum -a 256 $(CMD_BINARY_NAME)_mac
 docker-build:
 	docker run --rm -it -v "$(GOPATH)":/go -w /go/src/data_model_go golang:latest go build -o "$(CMD_BINARY_NAME)" -v
 
-publish: clean-dir publish-local
+publish: clean-dir publish-linux publish-windows publish-mac
 
 clean-dir:
-	rm -rf ./release/* !(.gitkeep)
+	rm -rf ./release/*
 	rm -f release_*.zip
 
 publish-common-init:
 	mkdir -p ./release/storage/logs && chmod -R 777 ./release/storage
 	cp -r ./assets ./release
+	cp .env.example ./release
 	cp .env.example ./release/.env
-	cp ./business_event.sql ./release
+	cp ./deploy/business_event.sql ./release
 
-publish-local: publish-common-init
-	cp $(CMD_BINARY_NAME) ./release
-	zip -r release_`date +%Y%m%d`.zip release
-	rm -rf ./release/* !(.gitkeep)
+publish-mac: publish-common-init
+	cp ./bin/business_data_model_mac ./release
+	zip -r release_mac-`date +%Y%m%d`.zip release
+	rm -rf ./release/*
 
+publish-windows: publish-common-init
+	cp ./bin/business_data_model_windows.exe ./release
+	zip -r release_windows-`date +%Y%m%d`.zip release
+	rm -rf ./release/*
+
+publish-linux: publish-common-init
+	cp ./bin/business_data_model_linux ./release
+	zip -r release_linux-`date +%Y%m%d`.zip release
+	rm -rf ./release/*
