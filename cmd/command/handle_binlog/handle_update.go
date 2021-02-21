@@ -61,7 +61,7 @@ func updateRoutineModelStream(ev *replication.RowsEvent) {
 			if !cmp.Equal(value, ev.Rows[next][idx]) {
 				updatedColumns = append(updatedColumns, fieldName)
 				//strValue := fmt.Sprintf("%s", ev.Rows[next][idx])
-				strValue := getValueString(ev.Rows[next][idx])
+				strValue := common.GetValueString(ev.Rows[next][idx])
 				updatedData[fieldName] = strValue
 			}
 		}
@@ -98,8 +98,8 @@ func updateRoutineStatRule(ev *replication.RowsEvent) {
 				continue
 			}
 
-			from, _ := getStringValue(value)
-			to, _ := getStringValue(ev.Rows[next][idx])
+			from, _ := common.GetStringValue(value)
+			to, _ := common.GetStringValue(ev.Rows[next][idx])
 			check, err := CheckStatDirection(classId, from, to)
 			// 流程变更不合规， 做一些通知URL, 钉钉，记录库等
 			if !check {
