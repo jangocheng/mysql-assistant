@@ -2,74 +2,69 @@ package common
 
 import (
 	"errors"
-	"fmt"
-	"reflect"
 	"strconv"
-	"time"
-	"xorm.io/core"
 )
 
 func GetKey(dbName string, tableName string, fieldName string) string {
 	return dbName + "_" + tableName + "_" + fieldName
 }
 
-
-func GetValueString(v interface{}) string {
-	rawValue := reflect.Indirect(reflect.ValueOf(v))
-
-	stringV, _ := value2String(&rawValue)
-	return stringV
-}
+//func GetValueString(v interface{}) string {
+//	rawValue := reflect.Indirect(reflect.ValueOf(v))
+//
+//	stringV, _ := value2String(&rawValue)
+//	return stringV
+//}
 
 // 如果早知这样，直接用xorm就好？
 // 另一种类型断言
 // https://www.jianshu.com/p/787cf3a41ccb
-func value2String(rawValue *reflect.Value) (str string, err error) {
-	aa := reflect.TypeOf((*rawValue).Interface())
-	vv := reflect.ValueOf((*rawValue).Interface())
-	switch aa.Kind() {
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		str = strconv.FormatInt(vv.Int(), 10)
-	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		str = strconv.FormatUint(vv.Uint(), 10)
-	case reflect.Float32, reflect.Float64:
-		str = strconv.FormatFloat(vv.Float(), 'f', -1, 64)
-	case reflect.String:
-		str = vv.String()
-	case reflect.Array, reflect.Slice:
-		switch aa.Elem().Kind() {
-		case reflect.Uint8:
-			data := rawValue.Interface().([]byte)
-			str = string(data)
-			if str == "\x00" {
-				str = "0"
-			}
-		default:
-			err = fmt.Errorf("Unsupported struct type %v", vv.Type().Name())
-		}
-	// time type
-	case reflect.Struct:
-		if aa.ConvertibleTo(core.TimeType) {
-			str = vv.Convert(core.TimeType).Interface().(time.Time).Format(time.RFC3339Nano)
-		} else {
-			err = fmt.Errorf("Unsupported struct type %v", vv.Type().Name())
-		}
-	case reflect.Bool:
-		str = strconv.FormatBool(vv.Bool())
-	case reflect.Complex128, reflect.Complex64:
-		str = fmt.Sprintf("%v", vv.Complex())
-	/* TODO: unsupported types below
-	   case reflect.Map:
-	   case reflect.Ptr:
-	   case reflect.Uintptr:
-	   case reflect.UnsafePointer:
-	   case reflect.Chan, reflect.Func, reflect.Interface:
-	*/
-	default:
-		err = fmt.Errorf("Unsupported struct type %v", vv.Type().Name())
-	}
-	return
-}
+//func value2String(rawValue *reflect.Value) (str string, err error) {
+//	aa := reflect.TypeOf((*rawValue).Interface())
+//	vv := reflect.ValueOf((*rawValue).Interface())
+//	switch aa.Kind() {
+//	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+//		str = strconv.FormatInt(vv.Int(), 10)
+//	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+//		str = strconv.FormatUint(vv.Uint(), 10)
+//	case reflect.Float32, reflect.Float64:
+//		str = strconv.FormatFloat(vv.Float(), 'f', -1, 64)
+//	case reflect.String:
+//		str = vv.String()
+//	case reflect.Array, reflect.Slice:
+//		switch aa.Elem().Kind() {
+//		case reflect.Uint8:
+//			data := rawValue.Interface().([]byte)
+//			str = string(data)
+//			if str == "\x00" {
+//				str = "0"
+//			}
+//		default:
+//			err = fmt.Errorf("Unsupported struct type %v", vv.Type().Name())
+//		}
+//	// time type
+//	case reflect.Struct:
+//		if aa.ConvertibleTo(core.TimeType) {
+//			str = vv.Convert(core.TimeType).Interface().(time.Time).Format(time.RFC3339Nano)
+//		} else {
+//			err = fmt.Errorf("Unsupported struct type %v", vv.Type().Name())
+//		}
+//	case reflect.Bool:
+//		str = strconv.FormatBool(vv.Bool())
+//	case reflect.Complex128, reflect.Complex64:
+//		str = fmt.Sprintf("%v", vv.Complex())
+//	/* TODO: unsupported types below
+//	   case reflect.Map:
+//	   case reflect.Ptr:
+//	   case reflect.Uintptr:
+//	   case reflect.UnsafePointer:
+//	   case reflect.Chan, reflect.Func, reflect.Interface:
+//	*/
+//	default:
+//		err = fmt.Errorf("Unsupported struct type %v", vv.Type().Name())
+//	}
+//	return
+//}
 
 func GetIntValue(a interface{}) (int, error) {
 	switch a.(type) {

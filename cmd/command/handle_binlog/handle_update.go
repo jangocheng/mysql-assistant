@@ -61,7 +61,8 @@ func updateRoutineModelStream(ev *replication.RowsEvent) {
 			if !cmp.Equal(value, ev.Rows[next][idx]) {
 				updatedColumns = append(updatedColumns, fieldName)
 				//strValue := fmt.Sprintf("%s", ev.Rows[next][idx])
-				strValue := common.GetValueString(ev.Rows[next][idx])
+				//strValue := common.GetValueString(ev.Rows[next][idx])
+				strValue, _ := common.GetStringValue(ev.Rows[next][idx])
 				updatedData[fieldName] = strValue
 			}
 		}
@@ -128,5 +129,3 @@ func updateRoutineStatistics(ev *replication.RowsEvent) {
 		}
 	}
 }
-
-
