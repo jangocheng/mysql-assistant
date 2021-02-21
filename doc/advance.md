@@ -40,8 +40,9 @@ binlog-start -host='host' -username='username' -password='password'
 ```bash
 go-callvis -focus=owen2020/cmd/command/handle_binlog -group pkg,type -limit owen2020/cmd/command  ./cmd
 ```
+
 ![handle_binlog_package_graph](/doc/images/package_graph.jpg)
 
 参考
-> https://www.lagou.com/lgeduarticle/96545.html
+> https://www.lagou.com/lgeduarticle/96545.html  
 > https://github.com/ofabry/go-callvis/tree/master/examples
