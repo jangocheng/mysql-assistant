@@ -5,7 +5,7 @@ import (
 	"log"
 	"os/exec"
 	"owen2020/app/apputil"
-	"owen2020/cmd/command/handle_binlog"
+	"owen2020/cmd/command/handle_binlog/common"
 	"owen2020/conn"
 	"runtime"
 	"time"
@@ -24,8 +24,8 @@ func Dev(c *cli.Context) error {
 	// 初始化event数据库链接池
 	conn.InitEventGormPool()
 
-	handle_binlog.InitStatisticsRules()
-	apputil.PrettyPrint(handle_binlog.StatisticsRules)
+	common.InitStatisticsRules()
+	apputil.PrettyPrint(common.StatisticsRules)
 
 	fmt.Println( time.Now().Unix() )
 	return nil

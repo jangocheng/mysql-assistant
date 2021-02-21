@@ -7,7 +7,8 @@ import (
 	"github.com/siddontang/go-mysql/replication"
 	"os"
 	"owen2020/app/models"
-	"owen2020/conn"
+	"owen2020/cmd/command/handle_binlog/common"
+	"owen2020/cmd/command/handle_binlog/store"
 	"strings"
 )
 
@@ -30,12 +31,12 @@ func handleUpdateEventV1(e *replication.BinlogEvent) {
 func updateRoutineModelStream(ev *replication.RowsEvent) {
 	dbName := string(ev.Table.Schema)
 	tableName := string(ev.Table.Table)
-	ok := FilterTable(dbName, tableName)
+	ok := common.FilterTable(dbName, tableName)
 	if !ok {
 		fmt.Println("skip update", dbName, ".", tableName)
 		return
 	}
-	tableSchema := DBTables[dbName+"."+tableName]
+	tableSchema := common.DBTables[dbName+"."+tableName]
 
 	var streams []models.DddEventStream
 	stream := models.DddEventStream{}
@@ -74,13 +75,13 @@ func updateRoutineModelStream(ev *replication.RowsEvent) {
 		streams = append(streams, stream)
 	}
 
-	streamAddRows(streams)
+	store.StreamAddRows(streams)
 }
 
 func updateRoutineStatRule(ev *replication.RowsEvent) {
 	dbName := string(ev.Table.Schema)
 	tableName := string(ev.Table.Table)
-	tableSchema := DBTables[dbName+"."+tableName]
+	tableSchema := common.DBTables[dbName+"."+tableName]
 
 	for i := 0; i < len(ev.Rows); i = i + 2 {
 		next := i + 1
@@ -103,7 +104,7 @@ func updateRoutineStatRule(ev *replication.RowsEvent) {
 			// 流程变更不合规， 做一些通知URL, 钉钉，记录库等
 			if !check {
 				fmt.Println(dbName, tableName, fieldName, "classId:", classId, "from:", from, "to:", to, err)
-				saveStateAbnormal(dbName, tableName, fieldName, from, to)
+				store.SaveStateAbnormal(dbName, tableName, fieldName, from, to)
 			}
 		}
 	}
@@ -111,9 +112,9 @@ func updateRoutineStatRule(ev *replication.RowsEvent) {
 func updateRoutineStatistics(ev *replication.RowsEvent) {
 	dbName := string(ev.Table.Schema)
 	tableName := string(ev.Table.Table)
-	tableSchema := DBTables[dbName+"."+tableName]
+	tableSchema := common.DBTables[dbName+"."+tableName]
 
-	StatisticsIncrease(dbName, tableName, "", UPDATE, 1)
+	store.StatisticsIncrease(dbName, tableName, "", store.UPDATE, 1)
 
 	for i := 0; i < len(ev.Rows); i = i + 2 {
 		next := i + 1
@@ -123,19 +124,9 @@ func updateRoutineStatistics(ev *replication.RowsEvent) {
 			}
 
 			fieldName := tableSchema[idx]
-			StatisticsIncrease(dbName, tableName, fieldName, UPDATE, 1)
+			store.StatisticsIncrease(dbName, tableName, fieldName, store.UPDATE, 1)
 		}
 	}
 }
 
-func saveStateAbnormal(dbName string, tableName string, fieldName string, stateFrom string, stateTo string) {
-	info := models.StateAbnormal{}
-	info.DbName = dbName
-	info.TableName = tableName
-	info.FieldName = fieldName
-	info.StateFrom = stateFrom
-	info.StateTo = stateTo
 
-	gorm := conn.GetEventGorm()
-	gorm.Table("state_abnormal").Create(&info)
-}

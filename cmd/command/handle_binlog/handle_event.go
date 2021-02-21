@@ -6,17 +6,6 @@ import (
 	"owen2020/app/apputil"
 )
 
-//Filter 定义过滤
-var Filter string = ""
-
-//TableColumnIdentify 表字段ID对应字段名
-type TableColumnIdentify map[int]string
-
-//DBTable  数据库.数据表map类型
-type DBTable map[string]TableColumnIdentify
-
-// DBTables 数据库.数据表map配置实例
-var DBTables DBTable = DBTable{}
 
 // HandleEvent mysql binlog event 处理
 func HandleEvent(e *replication.BinlogEvent) {

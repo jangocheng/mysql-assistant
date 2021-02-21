@@ -1,4 +1,4 @@
-package handle_binlog
+package store
 
 import (
 	"os"
@@ -44,7 +44,7 @@ func streamNeedUpdate() bool {
 	return false
 }
 
-func streamAddRows(ss []models.DddEventStream) {
+func StreamAddRows(ss []models.DddEventStream) {
 	streamAddToMem(ss)
 
 	if !streamNeedUpdate() {

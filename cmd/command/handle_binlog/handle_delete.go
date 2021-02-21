@@ -2,28 +2,37 @@ package handle_binlog
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/siddontang/go-mysql/replication"
 	"os"
 	"owen2020/app/models"
-	"owen2020/conn"
+	"owen2020/cmd/command/handle_binlog/common"
+	"owen2020/cmd/command/handle_binlog/store"
 	"strings"
 )
 
 func handleDeleteRowsEventV1(e *replication.BinlogEvent) {
 	ev, _ := e.Event.(*replication.RowsEvent)
-	dbName := string(ev.Table.Schema)
-	tableName := string(ev.Table.Table)
-	ok := FilterTable(dbName, tableName)
-	if !ok {
-		fmt.Println("skip delete", dbName, ".", tableName)
-		return
-	}
 
 	if os.Getenv("ENABLE_DATA_STATISTICS") == "yes" {
-		StatisticsIncrease(dbName, tableName, "", DELETE, 1)
+		go deleteRoutineStatistics(ev)
 	}
 
+	if os.Getenv("ENABLE_MODEL_STREAM") == "yes" {
+		insertRoutineModelStream(ev)
+	}
+}
+
+func deleteRoutineStatistics(ev *replication.RowsEvent) {
+	dbName := string(ev.Table.Schema)
+	tableName := string(ev.Table.Table)
+
+	store.StatisticsIncrease(dbName, tableName, "", store.INSERT, 1)
+}
+
+func deleteRoutineModelStream(ev *replication.RowsEvent) {
+	dbName := string(ev.Table.Schema)
+	tableName := string(ev.Table.Table)
+	
 	var streams []models.DddEventStream
 
 	stream := &models.DddEventStream{}
@@ -37,7 +46,7 @@ func handleDeleteRowsEventV1(e *replication.BinlogEvent) {
 		var updatedColumns []string
 		updatedData := make(map[string]interface{})
 
-		tableSchema := DBTables[string(ev.Table.Schema)+"."+string(ev.Table.Table)]
+		tableSchema := common.DBTables[string(ev.Table.Schema)+"."+string(ev.Table.Table)]
 		for idx, value := range ev.Rows[i] {
 			allColumns = append(allColumns, tableSchema[idx])
 			updatedColumns = append(updatedColumns, tableSchema[idx])
@@ -52,6 +61,6 @@ func handleDeleteRowsEventV1(e *replication.BinlogEvent) {
 
 		streams = append(streams, *stream)
 	}
-	gorm := conn.GetEventGorm()
-	gorm.Table("ddd_event_stream").Create(&streams)
+
+	store.StreamAddRows(streams)
 }

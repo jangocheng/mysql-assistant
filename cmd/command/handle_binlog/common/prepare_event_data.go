@@ -1,4 +1,4 @@
-package handle_binlog
+package common
 
 import (
 	"fmt"
@@ -7,6 +7,20 @@ import (
 	"owen2020/conn"
 	"regexp"
 	"strings"
+)
+
+//TableColumnIdentify 表字段ID对应字段名
+type TableColumnIdentify map[int]string
+
+//DBTable  数据库.数据表map类型
+type DBTable map[string]TableColumnIdentify
+
+var (
+	//Filter 定义过滤
+	Filter string = ""
+
+	// DBTables 数据库.数据表map配置实例
+	DBTables DBTable = DBTable{}
 )
 
 func InitDBTables() {

@@ -6,6 +6,7 @@ import (
 	"os"
 	"owen2020/app/apputil"
 	"owen2020/cmd/command/handle_binlog"
+	"owen2020/cmd/command/handle_binlog/common"
 	"owen2020/cmd/command/mysqlutil"
 	"owen2020/conn"
 
@@ -43,34 +44,34 @@ func StartBinlogClient(c *cli.Context) error {
 	username := c.String("username")
 	password := c.String("password")
 
-	handle_binlog.Filter = c.String("filter")
-	fmt.Println(handle_binlog.Filter)
+	common.Filter = c.String("filter")
+	fmt.Println(common.Filter)
 
 	// 初始化sync数据库连接池
 	conn.InitSyncerGormPool(host, port, username, password)
 	// 取出所有库表的字段ID对应的字段名
 	// 初始化所有库.表的字段ID对应字段名
-	handle_binlog.InitDBTables()
+	common.InitDBTables()
 	fmt.Println("db tables")
-	apputil.PrettyPrint(handle_binlog.DBTables)
+	apputil.PrettyPrint(common.DBTables)
 
 	// 初始化event数据库链接池
 	conn.InitEventGormPool()
 	//初始化 - 需要检查状态变更正确的数据
 	if os.Getenv("ENABLE_CHECK_STATE") == "yes" {
-		handle_binlog.InitState()
+		common.InitState()
 	}
 	//初始化 - 统计数据的规则
 	if os.Getenv("ENABLE_DATA_STATISTICS") == "yes" {
-		handle_binlog.InitStatisticsRules()
+		common.InitStatisticsRules()
 	}
 
 	fmt.Println("StateClasses")
-	apputil.PrettyPrint(handle_binlog.StateClasses)
+	apputil.PrettyPrint(common.StateClasses)
 	fmt.Println("StateClassDirections")
-	apputil.PrettyPrint(handle_binlog.StateClassDirections)
+	apputil.PrettyPrint(common.StateClassDirections)
 	fmt.Println("Statistics Rules")
-	apputil.PrettyPrint(handle_binlog.StatisticsRules)
+	apputil.PrettyPrint(common.StatisticsRules)
 
 	// 初始化 binlog数据库同步配置
 	cfg := replication.BinlogSyncerConfig{

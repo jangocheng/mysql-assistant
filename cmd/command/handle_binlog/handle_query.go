@@ -3,6 +3,7 @@ package handle_binlog
 import (
 	"fmt"
 	"github.com/siddontang/go-mysql/replication"
+	"owen2020/cmd/command/handle_binlog/common"
 )
 
 func handleQueryEvent(e *replication.BinlogEvent) {
@@ -15,5 +16,5 @@ func handleQueryEvent(e *replication.BinlogEvent) {
 		//e.Dump(os.Stdout)
 		return
 	}
-	FlushDBTables(string(ev.Schema))
+	common.FlushDBTables(string(ev.Schema))
 }

@@ -1,11 +1,11 @@
-package handle_binlog
+package store
 
 import (
 	"errors"
 	"fmt"
 	"os"
 	"owen2020/app/models"
-	"owen2020/app/models/dao"
+	"owen2020/cmd/command/handle_binlog/common"
 	"owen2020/conn"
 	"strconv"
 	"sync"
@@ -17,7 +17,6 @@ type MySyncMap struct {
 }
 
 var (
-	StatisticsRules   map[string]int = make(map[string]int)
 	StatisticsDayData MySyncMap
 )
 
@@ -37,19 +36,9 @@ func (m MySyncMap) Print(k interface{}) {
 	fmt.Println(value, ok)
 }
 
-func InitStatisticsRules() {
-	list, _ := dao.GetStatisticsRuleList()
-
-	for _, v := range list {
-		key := GetKey(v.DbName, v.TableName, v.FieldName)
-		value := v.StatisticsRuleId
-		StatisticsRules[key] = value
-	}
-}
-
 func GetRuleId(dbName string, tableName string, fieldName string) (int, error) {
-	key := GetKey(dbName, tableName, fieldName)
-	ruleId, ok := StatisticsRules[key]
+	key := common.GetKey(dbName, tableName, fieldName)
+	ruleId, ok := common.StatisticsRules[key]
 	if !ok {
 		return 0, errors.New("rule not exist")
 	}
@@ -149,7 +138,7 @@ func statisticsStore() {
 
 func GetDayKey(dbName string, tableName string, fieldName string, now time.Time) string {
 	date := now.Format("20060102")
-	key := GetKey(dbName, tableName, fieldName)
+	key := common.GetKey(dbName, tableName, fieldName)
 	return key + "_" + date
 }
 

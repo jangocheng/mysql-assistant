@@ -27,6 +27,8 @@
 如：
 ![状态有向图](/doc/images/status_flow.jpg)
 
-## 扩展-graphviz dot有向图 和 neo4j图型数据库
+## 扩展
+
+### graphviz dot有向图 和 neo4j图型数据库
 
 本项目使用graphviz生成有向图。 如需要生成更复杂的数据关系，可以考虑使用图型数据库，如neo4j等。

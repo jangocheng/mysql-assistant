@@ -6,22 +6,37 @@ import (
 	"github.com/siddontang/go-mysql/replication"
 	"os"
 	"owen2020/app/models"
-	"owen2020/conn"
+	"owen2020/cmd/command/handle_binlog/common"
+	"owen2020/cmd/command/handle_binlog/store"
 	"strings"
 )
 
 func handleWriteRowsEventV1(e *replication.BinlogEvent) {
 	ev, _ := e.Event.(*replication.RowsEvent)
+
+	if os.Getenv("ENABLE_DATA_STATISTICS") == "yes" {
+		go insertRoutineStatistics(ev)
+	}
+
+	if os.Getenv("ENABLE_MODEL_STREAM") == "yes" {
+		insertRoutineModelStream(ev)
+	}
+}
+
+func insertRoutineStatistics(ev *replication.RowsEvent) {
 	dbName := string(ev.Table.Schema)
 	tableName := string(ev.Table.Table)
-	ok := FilterTable(dbName, tableName)
+
+	store.StatisticsIncrease(dbName, tableName, "", store.INSERT, 1)
+}
+
+func insertRoutineModelStream(ev *replication.RowsEvent) {
+	dbName := string(ev.Table.Schema)
+	tableName := string(ev.Table.Table)
+	ok := common.FilterTable(dbName, tableName)
 	if !ok {
 		fmt.Println("skip write", dbName, ".", tableName)
 		return
-	}
-
-	if os.Getenv("ENABLE_DATA_STATISTICS") == "yes" {
-		StatisticsIncrease(dbName, tableName, "", INSERT, 1)
 	}
 
 	var streams []models.DddEventStream
@@ -37,7 +52,7 @@ func handleWriteRowsEventV1(e *replication.BinlogEvent) {
 		var updatedColumns []string
 		updatedData := make(map[string]interface{})
 
-		tableSchema := DBTables[string(ev.Table.Schema)+"."+string(ev.Table.Table)]
+		tableSchema := common.DBTables[string(ev.Table.Schema)+"."+string(ev.Table.Table)]
 		for idx, value := range ev.Rows[i] {
 			allColumns = append(allColumns, tableSchema[idx])
 			updatedColumns = append(updatedColumns, tableSchema[idx])
@@ -52,6 +67,6 @@ func handleWriteRowsEventV1(e *replication.BinlogEvent) {
 
 		streams = append(streams, *stream)
 	}
-	gorm := conn.GetEventGorm()
-	gorm.Table("ddd_event_stream").Create(&streams)
+
+	store.StreamAddRows(streams)
 }
