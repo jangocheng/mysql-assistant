@@ -18,7 +18,7 @@ func handleDeleteRowsEventV1(e *replication.BinlogEvent) {
 	}
 
 	if os.Getenv("ENABLE_MODEL_STREAM") == "yes" {
-		insertRoutineModelStream(ev)
+		deleteRoutineModelStream(ev)
 	}
 }
 
@@ -32,7 +32,7 @@ func deleteRoutineStatistics(ev *replication.RowsEvent) {
 func deleteRoutineModelStream(ev *replication.RowsEvent) {
 	dbName := string(ev.Table.Schema)
 	tableName := string(ev.Table.Table)
-	
+
 	var streams []models.DddEventStream
 
 	stream := &models.DddEventStream{}
