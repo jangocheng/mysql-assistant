@@ -55,7 +55,7 @@ build-local:
 	export CGO_ENABLED=0
 	$(GOBUILD) -o $(CMD_BINARY_NAME) -v ./cmd/cmd.go
 	#shasum -a 256 $(CMD_BINARY_NAME)_mac
-docker-build:
+build-by-docker:
 	docker run --rm -it -v "$(GOPATH)":/go -w /go/src/data_model_go golang:latest go build -o "$(CMD_BINARY_NAME)" -v
 
 publish: clean-dir publish-local
@@ -77,4 +77,5 @@ publish-local: publish-common-init
 	rm -rf ./release/* \!\(.gitkeep\)
 	test -e ./release/.env && rm ./release/.env
 
+create-docker-image:
 
