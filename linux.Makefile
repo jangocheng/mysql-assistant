@@ -1,5 +1,4 @@
 # 项目数据模型管理系统
-# 现在需要解决的问题是怎么让xgo docker 走仓库镜像代理
 
 # 定义make变量
 GO=go
@@ -7,8 +6,8 @@ GOBUILD=$(GO) build
 GOCLEAN=$(GO) clean
 GOTEST=$(GO) test
 BINARY_PATH=./bin
-#CMD_BINARY_NAME=$(BINARY_PATH)/start_up
-#CMD_BINARY_WINDOW=$(CMD_BINARY_NAME)
+CMD_BINARY_NAME=$(BINARY_PATH)/start_up
+CMD_BINARY_UNIX=$(CMD_BINARY_NAME)_unix
 
 # make 不指定动作时，默认执行第一个动作
 default:build
@@ -18,24 +17,23 @@ test:
 	$(GOTEST) -v
 clean:
 	$(GOCLEAN)
-	rm -f $(BINARY_PATH)/*
+	# rm -f $(BINARY_PATH)/*
 
 mod:
 	$(GO) mod tidy
 
-build: mod clean test build-windows
+build: mod clean test build-linux
 	echo "build done"
 #	$(GOBUILD) -o $(CMD_BINARY_NAME) -v ./cmd/cmd.go
 #	shasum -a 256 $(CMD_BINARY_NAME)
 
 # Cross compilation
-build-windows:
-	xgo --targets="windows/*" -dest=$(BINARY_PATH) ./cmd/
-	#export CGO_ENABLED=0 GOOS=windows GOARCH=386
-	#$(GOBUILD) -o $(CMD_BINARY_NAME)_windows.exe -v ./cmd/cmd.go
-	#shasum -a 256 $(CMD_BINARY_NAME)_windows
+build-linux:
+	export CGO_ENABLED=0 GOOS=linux
+	$(GOBUILD) -o $(CMD_BINARY_NAME)_linux -v ./cmd/cmd.go
+	#shasum -a 256 $(CMD_BINARY_NAME)_linux
 
-publish: clean-dir publish-windows
+publish: clean-dir publish-linux
 
 clean-dir:
 	rm -rf ./release/* \!\(.gitkeep\)
@@ -48,6 +46,6 @@ publish-common-init:
 	cp .env.example ./release/.env
 	cp ./business_event.sql ./release
 
-publish-windows: publish-common-init
-	cp $(BINARY_PATH)/*.exe ./release
-	zip -r release_windows_`date +%Y%m%d`.zip release
+publish-linux: publish-common-init
+	cp $(CMD_BINARY_UNIX) ./release
+	zip -r release_linux_`date +%Y%m%d`.zip release

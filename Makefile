@@ -62,8 +62,8 @@ publish: clean-dir publish-local
 
 clean-dir:
 	rm -rf ./release/* \!\(.gitkeep\)
-	rm ./release/.env
-	rm -f release_*.zip
+	rm -rf ./release/.env
+	rm -rf release_*.zip
 
 publish-common-init:
 	mkdir -p ./release/storage/logs && chmod -R 777 ./release/storage
@@ -75,6 +75,6 @@ publish-local: publish-common-init
 	cp $(CMD_BINARY_NAME) ./release
 	zip -r release_`date +%Y%m%d`.zip release
 	rm -rf ./release/* \!\(.gitkeep\)
-	rm ./release/.env
+	test -e ./release/.env && rm ./release/.env
 
 
