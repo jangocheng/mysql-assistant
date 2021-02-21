@@ -73,5 +73,8 @@ func streamStore() (bool, error) {
 	gorm := conn.GetEventGorm()
 	gorm.Table("ddd_event_stream").Create(eventStreamData)
 
+	//eventStreamData = make([]models.DddEventStream, 200)
+	eventStreamData = eventStreamData[0:0]
+
 	return true, nil
 }
