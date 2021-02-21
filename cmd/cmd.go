@@ -28,12 +28,12 @@ func main() {
 
 	app := &cli.App{
 		Commands: []*cli.Command{
-			{
-				Name:    "dev",
-				Aliases: []string{"c"},
-				Usage:   "开发运行调试",
-				Action:  command.Dev,
-			},
+			//{
+			//	Name:    "dev",
+			//	Aliases: []string{"c"},
+			//	Usage:   "开发运行调试",
+			//	Action:  command.Dev,
+			//},
 			{
 				Name:   "binlog-start",
 				Usage:  "开始消费mysql binlog",
