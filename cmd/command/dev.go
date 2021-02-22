@@ -21,6 +21,7 @@ func Dev(c *cli.Context) error {
 	arrayString := os.Environ() //获取系统变量
 	fmt.Println(arrayString)
 	apputil.PrettyPrint(arrayString)
+	fmt.Println(os.Getenv("ZSH"))
 	return nil
 }
 
