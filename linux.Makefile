@@ -1,4 +1,5 @@
 # 项目数据模型管理系统
+# 没有成功， 需要
 
 # 定义make变量
 GO=go
@@ -7,7 +8,7 @@ GOCLEAN=$(GO) clean
 GOTEST=$(GO) test
 BINARY_PATH=./bin
 CMD_BINARY_NAME=$(BINARY_PATH)/start_up
-CMD_BINARY_UNIX=$(CMD_BINARY_NAME)_unix
+CMD_BINARY_LINUX=$(CMD_BINARY_NAME)
 
 # make 不指定动作时，默认执行第一个动作
 default:build
@@ -30,7 +31,7 @@ build: mod clean test build-linux
 # Cross compilation
 build-linux:
 	export CGO_ENABLED=0 GOOS=linux
-	$(GOBUILD) -o $(CMD_BINARY_NAME)_linux -v ./cmd/cmd.go
+	$(GOBUILD) -o $(CMD_BINARY_LINUX) -v ./cmd/cmd.go
 	#shasum -a 256 $(CMD_BINARY_NAME)_linux
 
 publish: clean-dir publish-linux
@@ -47,5 +48,5 @@ publish-common-init:
 	cp ./business_event.sql ./release
 
 publish-linux: publish-common-init
-	cp $(CMD_BINARY_UNIX) ./release
+	cp $(CMD_BINARY_LINUX) ./release
 	zip -r release_linux_`date +%Y%m%d`.zip release

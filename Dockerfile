@@ -15,6 +15,7 @@ ENV GO111MODULE="on"
 
 # 添加目录与文件
 RUN mkdir -p /go/src/
+ENV GOPROXY=https://goproxy.cn,direct
 RUN go env -w GOPROXY=https://goproxy.cn,direct
 WORKDIR /go/src
 COPY "./" "/go/src/"
@@ -47,15 +48,17 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o start_up cmd/cmd.go
 #FROM scratch AS prod
 FROM alpine AS prod
 #FROM centos AS prod
-# WORKDIR /
+RUN mkdir -p /go/src/storage && chmod -R 777 /go/src/storage
+WORKDIR /go/src/
 
 # 从buil阶段拷贝二进制文件
-COPY --from=build "/go/src/start_up" /binary_command
-COPY --from=build "/go/src/.env" /.env
-COPY --from=build "/go/src/storage" /storage
-COPY ./assets /assets
+COPY --from=build "/go/src/start_up" /go/src/start_up
+COPY --from=build "/go/src/.env.example" /go/src/.env
+COPY ./assets /go/src/assets
+#COPY "./,env.example" "/go/src/.env"
+
 # 环境变量
 # ENV
 
 EXPOSE 8000
-CMD ["/start_up"]
+CMD ["/go/src/start_up"]
