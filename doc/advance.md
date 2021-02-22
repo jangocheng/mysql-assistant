@@ -46,3 +46,13 @@ go-callvis -focus=owen2020/cmd/command/handle_binlog -group pkg,type -limit owen
 参考
 > https://www.lagou.com/lgeduarticle/96545.html  
 > https://github.com/ofabry/go-callvis/tree/master/examples
+
+## docker和make说明
+### docker镜像构建
+项目根目中的Dockerfile是为构建项目镜像准备的。还需要改动读取mysql，redis等配置的方式。
+
+### Makefile说明
+三个Makefile的做用：   
+Makefile - 构建本机环境的可执行文件  
+linux.Makefile - 构建linux系统可执行文件, 非项目维护者不需要关心  
+window.Makefile - 构建window系统可执行文件, 非项目维护者不需要关心  
