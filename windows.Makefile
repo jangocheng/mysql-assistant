@@ -30,7 +30,7 @@ build: mod clean test build-windows
 
 # Cross compilation
 build-windows:
-	xgo --targets="windows/*" -dest=$(BINARY_PATH) ./cmd/
+	xgo --image="youwen21/ali-proxy-xgo" --targets="windows/*" -dest=$(BINARY_PATH) ./cmd/
 	#export CGO_ENABLED=0 GOOS=windows GOARCH=386
 	#$(GOBUILD) -o $(CMD_BINARY_NAME)_windows.exe -v ./cmd/cmd.go
 	#shasum -a 256 $(CMD_BINARY_NAME)_windows

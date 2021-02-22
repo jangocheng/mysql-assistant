@@ -2,15 +2,12 @@ package command
 
 import (
 	"fmt"
+	"github.com/urfave/cli/v2"
 	"log"
+	"os"
 	"os/exec"
 	"owen2020/app/apputil"
-	"owen2020/cmd/command/handle_binlog/common"
-	"owen2020/conn"
 	"runtime"
-	"time"
-
-	"github.com/urfave/cli/v2"
 )
 
 //How to pretty print a Golang structure? [duplicate]
@@ -21,13 +18,9 @@ import (
 
 func Dev(c *cli.Context) error {
 
-	// 初始化event数据库链接池
-	conn.InitEventGormPool()
-
-	common.InitStatisticsRules()
-	apputil.PrettyPrint(common.StatisticsRules)
-
-	fmt.Println( time.Now().Unix() )
+	arrayString := os.Environ() //获取系统变量
+	fmt.Println(arrayString)
+	apputil.PrettyPrint(arrayString)
 	return nil
 }
 

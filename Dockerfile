@@ -20,7 +20,7 @@ WORKDIR /go/src
 COPY "./" "/go/src/"
 
 WORKDIR /go/src/
-RUN CGO_ENABLED=0 GOOS=linux go build -o binary_command cmd/cmd.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o start_up cmd/cmd.go
 
 
 
@@ -50,7 +50,7 @@ FROM alpine AS prod
 # WORKDIR /
 
 # 从buil阶段拷贝二进制文件
-COPY --from=build "/go/src/binary_command" /binary_command
+COPY --from=build "/go/src/start_up" /binary_command
 COPY --from=build "/go/src/.env" /.env
 COPY --from=build "/go/src/storage" /storage
 COPY ./assets /assets
@@ -58,4 +58,4 @@ COPY ./assets /assets
 # ENV
 
 EXPOSE 8000
-CMD ["/binary_command"]
+CMD ["/start_up"]
