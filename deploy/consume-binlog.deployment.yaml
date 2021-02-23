@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: data-model-web-deployment
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: data-model
+    spec:
+      containers:
+      - name: nginx
+        image: youwen21/project-data-model
+        imagePullPolicy: IfNotPresent
+        command: ["/go/src/start_up"]
+        args: [
+            "binlog-start",
+            "-host=$(mysql_host)",
+            "-port=$(mysql_port)",
+            "-username=$(mysql_username)",
+            "-password=$(mysql_password)",
+            "-filter=$(filter)",
+            "-server_id=$(server_id)"
+        ]
+        ports:
+        - containerPort: 8000
