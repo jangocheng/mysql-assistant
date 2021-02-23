@@ -7,9 +7,9 @@ $.ajaxSetup({
     //     xhr.setRequestHeader('Authorization', 'Bearer ' + token);
     // },
     complete: function (xhr, status) {
-        if (typeof (xhr.responseJSON.code) !== "undefined" && xhr.responseJSON.code === 600) {
-            showToast(xhr.responseJSON.msg);
-        }
+        // if (typeof (xhr.responseJSON.code) !== "undefined" && xhr.responseJSON.code === 600) {
+        //     showToast(xhr.responseJSON.msg);
+        // }
     }
 });
 
@@ -115,6 +115,9 @@ function showToast(msg, url) {
         })
     } else {
         alert(msg);
+        if(url === "undefined"){
+            url = "/admin/entrance/login.html";
+        }
         setTimeout(function () {
             window.location.href = url;
         }, 500);
