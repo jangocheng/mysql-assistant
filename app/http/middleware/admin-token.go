@@ -30,7 +30,7 @@ func AdminCheckToken(c *gin.Context) error {
 		tokenString, _ = c.Cookie("AdminAuthorization")
 	}
 	if tokenString == "" {
-		out.NewError(600, "缺失认证token").JSONOK(c)
+		out.NewError(401, "缺失认证token").JSONOK(c)
 		return errors.New("缺失认证token")
 	}
 
@@ -50,20 +50,20 @@ func AdminCheckToken(c *gin.Context) error {
 
 	if nil != err {
 		applog.Logger.WithFields(log.Fields{"token": tokenString, "error": err.Error()}).Info("admin-token解析token失败")
-		out.NewError(600, "admin-token解析token失败").JSONOK(c)
+		out.NewError(401, "admin-token解析token失败").JSONOK(c)
 		return errors.New("admin-token解析token失败")
 	}
 
 	if !token.Valid {
 		applog.Logger.WithFields(log.Fields{"token": tokenString, "secret": os.Getenv("JWT_SECRET")}).Info("admin-token解析无效")
-		out.NewError(600, "admin-token解析无效").JSONOK(c)
+		out.NewError(401, "admin-token解析无效").JSONOK(c)
 		return errors.New("admin-token解析无效")
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
 		applog.Logger.WithFields(log.Fields{"claims": claims}).Info("admin-token claims解析无效")
-		out.NewError(600, "admin-token, claims无效").JSONOK(c)
+		out.NewError(401, "admin-token, claims无效").JSONOK(c)
 		return errors.New("admin-token, claims无效")
 	}
 	c.Set("admin_id", claims["uid"])
