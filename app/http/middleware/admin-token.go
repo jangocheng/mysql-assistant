@@ -35,7 +35,7 @@ func AdminCheckToken(c *gin.Context) error {
 	}
 
 	tokenString = strings.TrimPrefix(tokenString, "Bearer ")
-
+	fmt.Println(tokenString)
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Don't forget to validate the alg is what you expect:
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -43,27 +43,28 @@ func AdminCheckToken(c *gin.Context) error {
 		}
 
 		hmacSampleSecret := os.Getenv("ADMIN_JWT_SECRET")
+		fmt.Println(hmacSampleSecret)
 		// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
 		return []byte(hmacSampleSecret), nil
 	})
 
 	if nil != err {
-		applog.Logger.WithFields(log.Fields{"token": tokenString}).Info("member-token解析token失败")
+		applog.Logger.WithFields(log.Fields{"token": tokenString, "error": err.Error()}).Info("admin-token解析token失败")
 		out.NewError(600, "admin-token解析token失败").JSONOK(c)
 		return errors.New("admin-token解析token失败")
 	}
 
 	if !token.Valid {
-		applog.Logger.WithFields(log.Fields{"token": tokenString, "secret": os.Getenv("JWT_SECRET")}).Info("member-token解析无效")
+		applog.Logger.WithFields(log.Fields{"token": tokenString, "secret": os.Getenv("JWT_SECRET")}).Info("admin-token解析无效")
 		out.NewError(600, "admin-token解析无效").JSONOK(c)
 		return errors.New("admin-token解析无效")
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		applog.Logger.WithFields(log.Fields{"claims": claims}).Info("member-tokenclaims解析无效")
-		out.NewError(600, "admin-token, cliaims无效").JSONOK(c)
-		return errors.New("admin-token, cliaims无效")
+		applog.Logger.WithFields(log.Fields{"claims": claims}).Info("admin-token claims解析无效")
+		out.NewError(600, "admin-token, claims无效").JSONOK(c)
+		return errors.New("admin-token, claims无效")
 	}
 	c.Set("admin_id", claims["uid"])
 

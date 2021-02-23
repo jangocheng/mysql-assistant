@@ -52,6 +52,10 @@ func SetUpRouter() *gin.Engine {
 	router.Static("/admin", "./assets/admin")                   // 目录下的文件
 	//router.StaticFS("/more_static", http.Dir("my_file_system"))  // 目录正的文件，定制file.System服务
 
+	router.GET("/",  func(c *gin.Context) {
+		c.Redirect(http.StatusMovedPermanently,"/admin/entrance/login.html")
+	})
+
 	// admin 路由
 	adminRoute(router)
 
