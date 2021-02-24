@@ -39,7 +39,7 @@ publish: clean-dir publish-linux
 clean-dir:
 	rm -rf ./release/* \!\(.gitkeep\)
 	rm -rf ./release/.env
-	rm -rf release_*.zip
+	mv release_*.zip ./storage
 
 publish-common-init:
 	mkdir -p ./release/storage/logs && chmod -R 777 ./release/storage
