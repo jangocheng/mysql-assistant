@@ -53,5 +53,12 @@
 其他功能都依赖MySQL数据库。
 
 
+## k8s布置
+
+deploy目录中已定义k8s deployment。  
+如果使用本地minikube开发， 可参考doc目下 k8s_command和minikube_command，实现本地访问admin管理后台
+
+
+
 
 
