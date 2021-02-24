@@ -8,7 +8,7 @@ docker pull youwen21/project_data_model:latest
 `为存储数据创建的库， mysql-binlog consumer拉取的binlog是针对实际业务中的mysql实例`
 
 SQL文件：
-> https://gitee.com/youwen21/business_data_model-go/blob/master/business_event.sql
+> project_data_model/business_event.sql
 
 ## 启动 web
 ```bash
