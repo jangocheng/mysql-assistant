@@ -4,11 +4,17 @@
 
 ### 创建
 
-把本机项目下的env创建成configMap kubectl create configmap data-model-configmap --from-env-file=.env
+把本机项目下的env创建成configMap     
+kubectl create configmap data-model-configmap --from-env-file=.env
 
 ### 查看
 
-kubectl get configmaps data-model-configmap -o yaml kubectl describe configmap data-model-configmap
+kubectl get configmaps data-model-configmap -o yaml     
+kubectl describe configmap data-model-configmap
+
+### 删除
+
+kubectl delete configmap data-model-configmap
 
 ## Job
 

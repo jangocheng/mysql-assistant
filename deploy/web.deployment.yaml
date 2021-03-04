@@ -25,38 +25,41 @@ spec:
           args: [
               "web-start",
           ]
-          env:
-            - name: DB_EVENT_PORT
-              value: "3306"
-            - name: DB_EVENT_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: data-model-configmap
-                  key: DB_EVENT_HOST
-            - name: DB_EVENT_USERNAME
-              valueFrom:
-                configMapKeyRef:
-                  name: data-model-configmap
-                  key: DB_EVENT_USERNAME
-            - name: DB_EVENT_PASSWORD
-              valueFrom:
-                configMapKeyRef:
-                  name: data-model-configmap
-                  key: DB_EVENT_PASSWORD
-            - name: DB_EVENT_DATABASE
-              valueFrom:
-                configMapKeyRef:
-                  name: data-model-configmap
-                  key: DB_EVENT_DATABASE
-            - name: DB_EVENT_CHARSET
-              valueFrom:
-                configMapKeyRef:
-                  name: data-model-configmap
-                  key: DB_EVENT_CHARSET
-            - name: DB_EVENT_FILTER
-              valueFrom:
-                configMapKeyRef:
-                  name: data-model-configmap
-                  key: DB_EVENT_FILTER
+          envFrom:
+            - configMapRef:
+                name: data-model-configmap
+#          env:
+#            - name: DB_EVENT_PORT
+#              value: "3306"
+#            - name: DB_EVENT_HOST
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: data-model-configmap
+#                  key: DB_EVENT_HOST
+#            - name: DB_EVENT_USERNAME
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: data-model-configmap
+#                  key: DB_EVENT_USERNAME
+#            - name: DB_EVENT_PASSWORD
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: data-model-configmap
+#                  key: DB_EVENT_PASSWORD
+#            - name: DB_EVENT_DATABASE
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: data-model-configmap
+#                  key: DB_EVENT_DATABASE
+#            - name: DB_EVENT_CHARSET
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: data-model-configmap
+#                  key: DB_EVENT_CHARSET
+#            - name: DB_EVENT_FILTER
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: data-model-configmap
+#                  key: DB_EVENT_FILTER
           ports:
             - containerPort: 8000

@@ -17,10 +17,10 @@ ENV GO111MODULE="on"
 RUN mkdir -p /go/src/
 ENV GOPROXY=https://goproxy.cn,direct
 RUN go env -w GOPROXY=https://goproxy.cn,direct
-WORKDIR /go/src
+
 COPY "./" "/go/src/"
 
-WORKDIR /go/src/
+WORKDIR /go/src
 RUN CGO_ENABLED=0 GOOS=linux go build -o start_up cmd/cmd.go
 
 
