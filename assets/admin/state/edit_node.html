@@ -94,14 +94,14 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>General Form</h1>
+                        <h1>业务状态-节点</h1>
                     </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">General Form</li>
-                        </ol>
-                    </div>
+<!--                    <div class="col-sm-6">-->
+<!--                        <ol class="breadcrumb float-sm-right">-->
+<!--                            <li class="breadcrumb-item"><a href="#">Home</a></li>-->
+<!--                            <li class="breadcrumb-item active">General Form</li>-->
+<!--                        </ol>-->
+<!--                    </div>-->
                 </div>
             </div><!-- /.container-fluid -->
         </section>
@@ -115,7 +115,7 @@
                         <!-- general form elements -->
                         <div class="card card-primary">
                             <div class="card-header">
-                                <h3 class="card-title">Quick Example</h3>
+                                <h3 class="card-title">编辑/edit</h3>
                             </div>
                             <!-- /.card-header -->
                             <!-- form start -->
@@ -175,29 +175,33 @@
 <script src="/plugins/jquery-tmpl/jquery.tmpl.js"></script>
 
 <script id="sidebar-level-1" type="text/x-jquery-tmpl">
-{{if $data._child}}
-<li class="nav-item has-treeview">
+  {{if $data._child}}
+  <li class="nav-item has-treeview">
     <a href="${pathname}" class="nav-link">
-    <i class="nav-icon fas fa-tachometer-alt"></i>
-    <p>
-    ${title}
-    <i class="right fas fa-angle-left"></i>
-    </p>
+      <i class="nav-icon fas fa-tree"></i>
+      <p>
+        ${title}
+        <i class="right fas fa-angle-left"></i>
+      </p>
     </a>
     <ul class="nav nav-treeview">
-    {{tmpl($data._child) '#sidebar-level-1'}}
-</ul>
-</li>
-{{else}}
-<li class="nav-item">
+      {{tmpl($data._child) '#sidebar-level-1'}}
+    </ul>
+  </li>
+  {{else}}
+  <li class="nav-item">
     <a href="${pathname}" class="nav-link">
-    <i class="nav-icon far fa-image"></i>
-    <p>
-    ${title}
-    </p>
+      <i class="nav-icon far fa-circle"></i>
+      <p>
+        ${title}
+      </p>
     </a>
-    </li>
-{{/if}}
+  </li>
+  {{/if}}
+
+</script>
+<script>
+    window.sideBarPath = "/admin/state/list.html"
 </script>
 <link rel="stylesheet" href="/plugins/jquery-toast-plugin-1.3.2/dist/jquery.toast.min.css">
 <script src="/plugins/jquery-toast-plugin-1.3.2/dist/jquery.toast.min.js"></script>

@@ -17,6 +17,16 @@ function getId() {
     return window.location.hash.substring(1);
 }
 
+function getSearchId(name="id") {
+    let searchParams = new URLSearchParams(window.location.search);
+    let id = searchParams.get(name);
+    if (id == null) {
+        return 0;
+    }
+
+    return id;
+}
+
 function genButtonInfo(url = '', text = "text") {
     return '<a class="btn btn-sm btn-info" href="' + url + '">' + text + '</a>';
 }
