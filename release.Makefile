@@ -35,7 +35,7 @@ BINARY_PATH=./bin
 CMD_BINARY_NAME=$(BINARY_PATH)/start_up
 
 # make 不指定动作时，默认执行第一个动作
-default:build
+default:publish
 
 test:
 	$(GOTEST) -v
@@ -45,15 +45,40 @@ clean:
 mod:
 	$(GO) mod tidy
 
-build-local:
-	export CGO_ENABLED=0
+clean-dir:
+	rm -rf ./release/* \!\(.gitkeep\)
+	test -e ./release/.env && rm ./release/.env
+
+mv-release-file:
+	mv release_*.zip ./storage
+
+publish-common-init:
+	mkdir -p ./release/storage/logs && chmod -R 777 ./release/storage
+	cp -r ./assets ./release
+	cp .env.example ./release/.env
+	cp ./business_event.sql ./release
+
+publish: publish-linux publish-mac publish-windows mv-release-file
+
+publish-windows: clean-dir build-windows publish-common-init
+	cp $(BINARY_PATH)/*.exe ./release
+	zip -r release_windows_`date +%Y%m%d`.zip release
+
+publish-mac: clean-dir build-mac publish-common-init
+	cp $(CMD_BINARY_NAME) ./release
+	zip -r release_mac_`date +%Y%m%d`.zip release
+
+publish-linux: clean-dir build-linux publish-common-init
+	cp $(CMD_BINARY_NAME) ./release
+	zip -r release_linux_`date +%Y%m%d`.zip release
+
+build-windows:
+	xgo --image="youwen21/ali-proxy-xgo" --targets="windows/*" -dest=$(BINARY_PATH) ./cmd/
+
+build-linux:
+	export CGO_ENABLED=0 GOOS=linux
 	$(GOBUILD) -o $(CMD_BINARY_NAME) -v ./cmd/cmd.go
-	shasum -a 256 $(CMD_BINARY_NAME)
 
-build: mod clean test build-local
-	echo "build done"
-#	$(GOBUILD) -o $(CMD_BINARY_NAME) -v ./cmd/cmd.go
-#	shasum -a 256 $(CMD_BINARY_NAME)
-
-
-
+build-mac:
+	export CGO_ENABLED=0 GOOS=darwin GOARCH=amd64
+	$(GOBUILD) -o $(CMD_BINARY_NAME) -v ./cmd/cmd.go
