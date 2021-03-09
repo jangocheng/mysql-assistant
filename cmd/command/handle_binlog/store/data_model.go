@@ -11,7 +11,7 @@ import (
 
 var (
 	// 逻辑中使用的某个变量
-	eventStreamData           []models.DddEventStream = make([]models.DddEventStream, 200)
+	eventStreamData           []models.DddEventStream = make([]models.DddEventStream, 0, 200)
 	eventStreamLastUpdateTime time.Time
 	// 与变量对应的使用互斥锁
 	dataGuard sync.Mutex
