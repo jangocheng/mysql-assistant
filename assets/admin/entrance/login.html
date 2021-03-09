@@ -104,6 +104,13 @@
             })
         })
     });
+
+    $(document).keydown(function(event){
+        if(event.keyCode == 13){
+            //alert('你按下了Enter');
+            $(".submit").click(); //模拟触发botton事件
+        }
+    });
 </script>
 </body>
 </html>
