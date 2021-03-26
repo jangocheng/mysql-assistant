@@ -2,12 +2,12 @@ package models
 
 import (
 	"database/sql/driver"
-	"errors"
 	"fmt"
 	"time"
 )
 
 const (
+	//timeFormat = "`2006-01-02 15:04:05`"
 	timeFormat = "2006-01-02 15:04:05"
 	dateFormat = "2006-01-02"
 )
@@ -65,25 +65,25 @@ func (t DateTime) String() string {
 
 // https://gorm.io/docs/data_types.html
 //Scan gorm receive
-func (t *DateTime) Scan(value interface{}) error {
-	byt, ok := value.([]byte)
-	if !ok {
-		*t = DateTime(time.Time{})
-		return errors.New(fmt.Sprint("convert failed, value:", value))
-	}
-
-	stringTime := string(byt)
-
-	if stringTime == "0000-00-00 00:00:00" {
-		*t = DateTime(time.Time{})
-		return nil
-	}
-
-	ttime, err := time.ParseInLocation(timeFormat, stringTime, time.UTC)
-	// ttime, err := time.ParseInLocation(`"`+timeFormat+`"`, stringTime, time.UTC)
-	*t = DateTime(ttime)
-	return err
-}
+//func (t *DateTime) Scan(value interface{}) error {
+//	byt, ok := value.([]byte)
+//	if !ok {
+//		*t = DateTime(time.Time{})
+//		return errors.New(fmt.Sprint("convert failed, value:", value))
+//	}
+//
+//	stringTime := string(byt)
+//
+//	if stringTime == "0000-00-00 00:00:00" {
+//		*t = DateTime(time.Time{})
+//		return nil
+//	}
+//
+//	ttime, err := time.ParseInLocation(timeFormat, stringTime, time.UTC)
+//	// ttime, err := time.ParseInLocation(`"`+timeFormat+`"`, stringTime, time.UTC)
+//	*t = DateTime(ttime)
+//	return err
+//}
 
 // Value gorm save
 // Value return json value, implement driver.Valuer interface
@@ -145,25 +145,25 @@ func (t Date) String() string {
 
 // https://gorm.io/docs/data_types.html
 //Scan gorm receive
-func (t *Date) Scan(value interface{}) error {
-	byt, ok := value.([]byte)
-	if !ok {
-		*t = Date(time.Time{})
-		return errors.New(fmt.Sprint("convert failed, value:", value))
-	}
-
-	stringTime := string(byt)
-
-	if stringTime == "0000-00-00" {
-		*t = Date(time.Time{})
-		return nil
-	}
-
-	ttime, err := time.ParseInLocation(dateFormat, stringTime, time.UTC)
-	// ttime, err := time.ParseInLocation(`"`+timeFormat+`"`, stringTime, time.UTC)
-	*t = Date(ttime)
-	return err
-}
+//func (t *Date) Scan(value interface{}) error {
+//	byt, ok := value.([]byte)
+//	if !ok {
+//		*t = Date(time.Time{})
+//		return errors.New(fmt.Sprint("convert failed, value:", value))
+//	}
+//
+//	stringTime := string(byt)
+//
+//	if stringTime == "0000-00-00" {
+//		*t = Date(time.Time{})
+//		return nil
+//	}
+//
+//	ttime, err := time.ParseInLocation(dateFormat, stringTime, time.UTC)
+//	// ttime, err := time.ParseInLocation(`"`+timeFormat+`"`, stringTime, time.UTC)
+//	*t = Date(ttime)
+//	return err
+//}
 
 // Value gorm save
 // Value return json value, implement driver.Valuer interface

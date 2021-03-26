@@ -23,7 +23,7 @@ var SqlDB *sql.DB
 func InitDB(host string, port int, username string, password string, database string) error {
 	driverName := os.Getenv("DB_CONNECTION")
 
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&loc=Local", username, password, host, port, database)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&loc=Local&parseTime=true", username, password, host, port, database)
 
 	DB, err := sql.Open(driverName, dsn)
 	if err != nil {
@@ -60,7 +60,7 @@ var SyncerGormPool *gorm.DB
 var EventGormPool *gorm.DB
 
 func InitSyncerGormPool(host string, port int, username string, password string) error {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/?charset=utf8&loc=Local", username, password, host, 3306)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/?charset=utf8&loc=Local&parseTime=true", username, password, host, 3306)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
@@ -80,7 +80,7 @@ func GetSyncerGorm() *gorm.DB {
 }
 
 func InitEventGormPool() error {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&loc=Local", os.Getenv("DB_EVENT_USERNAME"), os.Getenv("DB_EVENT_PASSWORD"), os.Getenv("DB_EVENT_HOST"), 3306, os.Getenv("DB_EVENT_DATABASE"), os.Getenv("DB_EVENT_CHARSET"))
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&loc=Local&parseTime=true", os.Getenv("DB_EVENT_USERNAME"), os.Getenv("DB_EVENT_PASSWORD"), os.Getenv("DB_EVENT_HOST"), 3306, os.Getenv("DB_EVENT_DATABASE"), os.Getenv("DB_EVENT_CHARSET"))
 	mysqlDb := mysql.Open(dsn)
 
 	db, err := gorm.Open(mysqlDb, &gorm.Config{})
