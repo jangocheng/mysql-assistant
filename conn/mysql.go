@@ -19,7 +19,7 @@ import (
 // https://gorm.io/docs/index.html
 //GetDefaultGorm
 func GetDefaultGorm() *gorm.DB {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s", os.Getenv("DB_USERNAME"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_HOST"), 3306, os.Getenv("DB_DATABASE"), os.Getenv("DB_CHARSET"))
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=true", os.Getenv("DB_USERNAME"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_HOST"), 3306, os.Getenv("DB_DATABASE"), os.Getenv("DB_CHARSET"))
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
@@ -39,7 +39,7 @@ func GetGormWithLog() *gorm.DB {
 		},
 	)
 
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&loc=Local", os.Getenv("DB_USERNAME"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_HOST"), 3306, os.Getenv("DB_DATABASE"), os.Getenv("DB_CHARSET"))
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&loc=Local&parseTime=true", os.Getenv("DB_USERNAME"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_HOST"), 3306, os.Getenv("DB_DATABASE"), os.Getenv("DB_CHARSET"))
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: newLogger,
 	})
@@ -52,7 +52,7 @@ func GetGormWithLog() *gorm.DB {
 
 //GetGormWithConfig 指定配置
 func GetGormWithConfig(config *gorm.Config) *gorm.DB {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s", os.Getenv("DB_USERNAME"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_HOST"), 3306, os.Getenv("DB_DATABASE"), os.Getenv("DB_CHARSET"))
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=true", os.Getenv("DB_USERNAME"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_HOST"), 3306, os.Getenv("DB_DATABASE"), os.Getenv("DB_CHARSET"))
 	// db, err := gorm.Open(mysql2.Open(dsn), &gorm.Config{})
 	db, err := gorm.Open(mysql.Open(dsn), config)
 	if err != nil {
@@ -65,7 +65,7 @@ func GetGormWithConfig(config *gorm.Config) *gorm.DB {
 
 
 func GetGormBc(host string, port int, username string, password string) *gorm.DB {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/?charset=utf8&loc=Local", username, password, host, 3306)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/?charset=utf8&loc=Local&parseTime=true", username, password, host, 3306)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
@@ -86,7 +86,7 @@ func GetGormBc(host string, port int, username string, password string) *gorm.DB
 //GetRawDb 原生DB
 func GetRawDb() *sql.DB {
 	driverName := os.Getenv("DB_CONNECTION")
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s", os.Getenv("DB_USERNAME"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_HOST"), 3306, os.Getenv("DB_DATABASE"), os.Getenv("DB_CHARSET"))
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=true", os.Getenv("DB_USERNAME"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_HOST"), 3306, os.Getenv("DB_DATABASE"), os.Getenv("DB_CHARSET"))
 	// dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&loc=%s&parseTime=true", os.Getenv("DB_USERNAME"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_HOST"), 3306, os.Getenv("DB_DATABASE"), os.Getenv("DB_CHARSET"), url.QueryEscape("Asia/Shanghai"))
 
 	db, err := sql.Open(driverName, dsn)
