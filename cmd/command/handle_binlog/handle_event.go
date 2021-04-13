@@ -3,7 +3,6 @@ package handle_binlog
 import (
 	"fmt"
 	"github.com/siddontang/go-mysql/replication"
-	"owen2020/app/apputil"
 )
 
 
@@ -85,11 +84,13 @@ func HandleEvent(e *replication.BinlogEvent) {
 	// case replication.ROWS_QUERY_EVENT:
 	// 	return "RowsQueryEvent"
 	case replication.WRITE_ROWS_EVENTv2:
-	case replication.UPDATE_ROWS_EVENTv2:
+		handleWriteRowsEventV1(e)
+	case replication.UPDATE_ROWS_EVENTv2: //
 		fmt.Println("update rows event v2")
-		apputil.PrettyPrint(e)
+		//apputil.PrettyPrint(e)
+		handleUpdateEventV1(e)
 	case replication.DELETE_ROWS_EVENTv2:
-
+		handleDeleteRowsEventV1(e)
 	case replication.GTID_EVENT: // 新GTID开始标识，它前面必然有一个PREVIOUS_GTIDS_EVENT事件
 	// 	return "GTIDEvent"
 	case replication.ANONYMOUS_GTID_EVENT:

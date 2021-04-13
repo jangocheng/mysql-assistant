@@ -95,7 +95,7 @@ func updateRoutineStatRule(ev *replication.RowsEvent) {
 			// 校验状态流
 			classId, err := GetStatClassId(dbName, tableName, fieldName)
 			if nil != err {
-				fmt.Println(dbName, tableName, fieldName, err)
+				//fmt.Println(dbName, tableName, fieldName, err)
 				continue
 			}
 
