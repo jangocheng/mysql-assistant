@@ -6,6 +6,7 @@ import (
 	"owen2020/app/models/dao"
 	"owen2020/app/reqt"
 	"owen2020/app/resp/out"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -69,7 +70,7 @@ func processStreamListToErData(list []models.DddEventStream, scope string, filte
 	for _, value := range list {
 		columns := extractColumns(&value, scope)
 		entityInfo := &Entity{}
-		entityInfo.Key = value.DbName + "." + value.TableName
+		entityInfo.Key = value.DbName + "." + value.TableName + "-" + strconv.Itoa(value.DddEventStreamId)
 
 		keyName := value.TableName + "_id"
 		for _, fieldName := range columns {
