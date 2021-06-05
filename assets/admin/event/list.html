@@ -360,7 +360,7 @@
                     // buttons += genButtonView(window.location.origin + '/admin/menu/view.html');
                     buttons += ' ' + getButton('/admin/event/effect.html?event_b=' + data[i].ddd_event_id, "事件数据详情", 'btn-info');
                     buttons += ' ' + '<a class="btn btn-sm btn-warning" onclick="compare(' + data[i].ddd_event_id + ')">对比</a>';
-                    buttons += ' ' + '<a class="btn btn-sm btn-primary" href="er.html?search=' + data[i].ddd_event_id + '">ER图</a>';
+                    buttons += ' ' + '<a class="btn btn-sm btn-primary" href="er.html?scope=update_columns&search=' + data[i].ddd_event_id + '">ER图</a>';
                     buttons += ' ' + genButtonEdit('/admin/event/edit.html#' + data[i].ddd_event_id);
                     buttons += ' ' + genButtonDel(sourceUrl + '/' + data[i].ddd_event_id, 'DELETE');
                     data[i].operation = buttons;
