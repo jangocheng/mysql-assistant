@@ -95,9 +95,10 @@ func EditStateClass(c *gin.Context) {
 	if err != nil {
 		return
 	}
+	info.StateClassId,_ = strconv.Atoi(id)
 
 	db := conn.GetEventGorm()
-	session := db.Table("state_class").Where("state_class_id = ?", id).UpdateColumns(info)
+	session := db.Table("state_class").Select("*").Where("state_class_id = ?", id).UpdateColumns(info)
 	//stmt := session.Statement
 	//fmt.Println("sql is :", stmt.SQL.String())
 	err = session.Error
@@ -117,9 +118,10 @@ func EditState(c *gin.Context) {
 	if err != nil {
 		return
 	}
+	info.StateId ,_ = strconv.Atoi(id)
 
 	db := conn.GetEventGorm()
-	session := db.Table("state").Where("state_id = ?", id).UpdateColumns(info)
+	session := db.Table("state").Select("*").Where("state_id = ?", id).UpdateColumns(info)
 	err = session.Error
 	if err != nil {
 		out.NewError(800, err.Error()).JSONOK(c)

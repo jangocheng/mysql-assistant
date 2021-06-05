@@ -11,6 +11,7 @@ import (
 	"owen2020/app/resp/out"
 	"owen2020/conn"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -86,12 +87,14 @@ func EditDddEvent(c *gin.Context) {
 	if err != nil {
 		return
 	}
+	eventInfo.DddEventId, _ = strconv.Atoi(id)
 
 	// config := &gorm.Session{DryRun: true}
 	config := &gorm.Session{}
 	db := conn.GetEventGorm()
 	session := db.Session(config)
-	stmt := session.Table("ddd_event").Where("ddd_event_id = ?", id).UpdateColumns(eventInfo).Statement
+	stmt := session.Table("ddd_event").Select("*").Where("ddd_event_id = ?", id).UpdateColumns(eventInfo).Statement
+	//stmt := session.Table("ddd_event").Where("ddd_event_id = ?", id).Save(eventInfo).Statement
 
 	fmt.Println("sql is :", stmt.SQL.String())
 	err = session.Error

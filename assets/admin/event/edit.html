@@ -27,7 +27,6 @@
             </li>
         </ul>
 
-        
 
         <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">
@@ -51,7 +50,8 @@
                         <span class="float-right text-muted text-sm">2 days</span>
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a href="/admin-api/v1/token?_ajax_method=DELETE" class="dropdown-item dropdown-footer" onclick="logout(this);" data-rest-type="DELETE">退出登录</a>
+                    <a href="/admin-api/v1/token?_ajax_method=DELETE" class="dropdown-item dropdown-footer"
+                       onclick="logout(this);" data-rest-type="DELETE">退出登录</a>
                 </div>
             </li>
         </ul>
@@ -96,12 +96,12 @@
                     <div class="col-sm-6">
                         <h1>业务事件数据模型</h1>
                     </div>
-<!--                    <div class="col-sm-6">-->
-<!--                        <ol class="breadcrumb float-sm-right">-->
-<!--                            <li class="breadcrumb-item"><a href="#">Home</a></li>-->
-<!--                            <li class="breadcrumb-item active">General Form</li>-->
-<!--                        </ol>-->
-<!--                    </div>-->
+                    <!--                    <div class="col-sm-6">-->
+                    <!--                        <ol class="breadcrumb float-sm-right">-->
+                    <!--                            <li class="breadcrumb-item"><a href="#">Home</a></li>-->
+                    <!--                            <li class="breadcrumb-item active">General Form</li>-->
+                    <!--                        </ol>-->
+                    <!--                    </div>-->
                 </div>
             </div><!-- /.container-fluid -->
         </section>
@@ -119,12 +119,14 @@
                             </div>
                             <!-- /.card-header -->
                             <!-- form start -->
-                            <form role="form" id="ajaxFormEdit" method="POST" action="/admin-api/v1/ddd_event"  enctype="application/x-www-form-urlencoded">
+                            <form role="form" id="ajaxFormEdit" method="POST" action="/admin-api/v1/ddd_event"
+                                  enctype="application/x-www-form-urlencoded">
                                 <input type="hidden" name="_ajax_method" value="POST">
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="event_name">事件名称</label>
-                                        <input name="event_name" type="text" class="form-control" id="event_name" placeholder="事件名称">
+                                        <input name="event_name" type="text" class="form-control" id="event_name"
+                                               placeholder="事件名称">
                                     </div>
                                     <div class="form-group">
                                         <label for="event_version">事件版本</label>
@@ -133,19 +135,22 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="event_link">事件外链文档</label>
-                                        <input name="event_link" type="text" class="form-control" id="event_link" placeholder="事件外链文档">
+                                        <input name="event_link" type="text" class="form-control" id="event_link"
+                                               placeholder="事件外链文档">
                                     </div>
                                     <div class="form-group">
                                         <label for="event_tag">事件标识</label>
-                                        <input name="event_tag" type="text" class="form-control" id="event_tag" placeholder="事件标签">
+                                        <input name="event_tag" type="text" class="form-control" id="event_tag"
+                                               placeholder="事件标签">
                                     </div>
                                     <div class="form-group">
                                         <label for="stream_ids">事件数据流IDS</label>
-                                        <input name="stream_ids" type="text" class="form-control" id="stream_ids" placeholder="事件标签">
+                                        <input name="stream_ids" type="text" class="form-control" id="stream_ids"
+                                               placeholder="事件标签">
                                     </div>
                                     <div class="form-group">
                                         <label>事件说明</label>
-                                        <textarea class="form-control" rows="3"></textarea>
+                                        <textarea name="comment" id="comment" class="form-control" rows="3"></textarea>
                                     </div>
                                 </div>
                                 <!-- /.card-body -->
@@ -166,7 +171,7 @@
     </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer">
-        
+
     </footer>
 
     <!-- Control Sidebar -->
@@ -181,8 +186,6 @@
 <script src="/AdminLTE-3.0.5/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="/AdminLTE-3.0.5/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- bs-custom-file-input -->
-<script src="/AdminLTE-3.0.5/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/AdminLTE-3.0.5/dist/js/adminlte.min.js"></script>
 
@@ -216,6 +219,7 @@
     </a>
   </li>
   {{/if}}
+
 </script>
 
 <script>
@@ -235,6 +239,8 @@
             if ($("#" + key).length > 0) {
                 let ele = $("#" + key)[0].tagName;
                 if (ele === "INPUT") {
+                    $("#" + key).val(info[key]);
+                } else if (ele === "TEXTAREA") {
                     $("#" + key).val(info[key]);
                 } else if (ele === "SELECT") {
                     $("#" + key).val(info[key]);
