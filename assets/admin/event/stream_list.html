@@ -151,13 +151,13 @@
                                 <tr>
                                     <th>勾选</th>
                                     <th>ID</th>
+                                    <th>创建时间</th>
                                     <th>库名</th>
                                     <th>表名</th>
                                     <th>事务标签</th>
                                     <th>binlog事件类型</th>
                                     <th>表变更字段</th>
                                     <th>说明</th>
-                                    <th>创建时间</th>
                                     <th>操作</th>
                                     <!--<th>表字段</th>-->
                                 </tr>
@@ -316,13 +316,13 @@
 <tr>
     <td>{{html checkbox}}</td>
     <td>${ddd_event_stream_id}</td>
+    <td>${created_at}</td>
     <td>${db_name}</td>
     <td>${table_name}</td>
     <td>${transaction_tag}</td>
     <td>${event_name} - ${event_type}</td>
     <td>${update_columns}</td>
     <td>${comment}</td>
-    <td>${created_at}</td>
     <td>{{html operation}}</td>
     <!--<td>${columns}</td>-->
 </tr>
