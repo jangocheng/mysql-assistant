@@ -2,6 +2,7 @@ package common
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 )
 
@@ -128,15 +129,15 @@ func GetStringValue(a interface{}) (string, error) {
 	case uint:
 		return strconv.FormatUint(uint64(a.(uint)), 10), nil
 	case float32:
-		return "", errors.New("type not support")
+		return strconv.FormatFloat(float64(a.(float32)), 'f', 6, 64), nil
 	case float64:
-		return "", errors.New("type not support")
+		return strconv.FormatFloat(a.(float64), 'f', 6, 64), nil
 	case complex64:
-		return "", errors.New("type not support")
+		return fmt.Sprint(a), nil
 	case complex128:
-		return "", errors.New("type not support")
+		return fmt.Sprint(a), nil
 	case uintptr:
-		return "", errors.New("type not support")
+		return fmt.Sprint(a), nil
 	case string:
 		return a.(string), nil
 	default: // 其他类型有pointer， struct， array, slice ,map, interface, function, channel

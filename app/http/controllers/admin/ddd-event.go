@@ -9,6 +9,7 @@ import (
 	"owen2020/app/reqt"
 	"owen2020/app/resp"
 	"owen2020/app/resp/out"
+	"owen2020/cmd/command/handle_binlog/common"
 	"owen2020/conn"
 	"sort"
 	"strconv"
@@ -182,7 +183,7 @@ func (s sortStreams) process() {
 }
 
 func processValues(jsonStr string) string {
-	jmap := make(map[string]string)
+	jmap := make(map[string]interface{})
 	err := json.Unmarshal([]byte(jsonStr), &jmap)
 	if err != nil {
 		fmt.Print(err)
@@ -190,7 +191,8 @@ func processValues(jsonStr string) string {
 	}
 	str := ""
 	for k, v := range jmap {
-		str += k + ":" + v + "\n"
+		strV, _ := common.GetStringValue(v)
+		str += k + ":" + strV + "\n"
 	}
 	return str
 }

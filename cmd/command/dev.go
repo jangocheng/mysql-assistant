@@ -4,9 +4,7 @@ import (
 	"fmt"
 	"github.com/urfave/cli/v2"
 	"log"
-	"os"
 	"os/exec"
-	"owen2020/app/apputil"
 	"runtime"
 )
 
@@ -17,11 +15,13 @@ import (
 // https://siongui.github.io/2016/01/30/go-pretty-print-variable/
 
 func Dev(c *cli.Context) error {
-
-	arrayString := os.Environ() //获取系统变量
-	fmt.Println(arrayString)
-	apputil.PrettyPrint(arrayString)
-	fmt.Println(os.Getenv("ZSH"))
+	var a complex64 = complex(1, 2)
+	s := fmt.Sprint( a)
+	fmt.Println(s)
+	//arrayString := os.Environ() //获取系统变量
+	//fmt.Println(arrayString)
+	//apputil.PrettyPrint(arrayString)
+	//fmt.Println(os.Getenv("ZSH"))
 	return nil
 }
 

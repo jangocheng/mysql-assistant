@@ -10,7 +10,6 @@ require (
 	github.com/go-playground/locales v0.13.0
 	github.com/go-playground/universal-translator v0.17.0
 	github.com/go-playground/validator/v10 v10.2.0
-	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/golang/protobuf v1.4.3
 	github.com/google/go-cmp v0.5.4
@@ -24,8 +23,6 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
-	github.com/onsi/ginkgo v1.14.2 // indirect
-	github.com/onsi/gomega v1.10.3 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/satori/go.uuid v1.2.0
 	github.com/siddontang/go-mysql v1.1.0
@@ -34,9 +31,7 @@ require (
 	github.com/tebeka/strftime v0.1.5 // indirect
 	github.com/urfave/cli/v2 v2.2.0
 	github.com/withlin/canal-go v1.0.10
-	golang.org/x/net v0.0.0-20201110031124-69a78807bb2b // indirect
 	golang.org/x/sys v0.0.0-20210220050731-9a76102bfb43 // indirect
-	golang.org/x/text v0.3.4 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
