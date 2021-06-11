@@ -110,6 +110,20 @@ func EditStateClass(c *gin.Context) {
 	out.NewSuccess(info).JSONOK(c)
 }
 
+func AddState(c *gin.Context) {
+	info := models.State{}
+	err := apputil.ShouldBindOrError(c, &info)
+
+	db := conn.GetEventGorm()
+	err = db.Table("state").Create(&info).Error
+	if err != nil {
+		out.NewError(800, err.Error()).JSONOK(c)
+		return
+	}
+
+	out.NewSuccess(info).JSONOK(c)
+}
+
 func EditState(c *gin.Context) {
 	id := c.Param("id")
 
@@ -121,7 +135,7 @@ func EditState(c *gin.Context) {
 	info.StateId ,_ = strconv.Atoi(id)
 
 	db := conn.GetEventGorm()
-	session := db.Table("state").Select("*").Where("state_id = ?", id).UpdateColumns(info)
+	session := db.Table("state").Select("state_class_id,state_value,state_value_desc").Where("state_id = ?", id).UpdateColumns(info)
 	err = session.Error
 	if err != nil {
 		out.NewError(800, err.Error()).JSONOK(c)

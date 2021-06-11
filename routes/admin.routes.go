@@ -73,6 +73,7 @@ func adminRoute(router *gin.Engine) {
 
 		adminAPI.GET("/state", admin.GetStateList)
 		adminAPI.GET("/state/:id", admin.GetStateInfo)
+		adminAPI.POST("/state", admin.AddState)
 		adminAPI.POST("/state/:id", admin.EditState)
 		adminAPI.DELETE("/state/:id", admin.DeleteStat)
 

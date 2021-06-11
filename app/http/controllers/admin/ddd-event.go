@@ -94,7 +94,7 @@ func EditDddEvent(c *gin.Context) {
 	config := &gorm.Session{}
 	db := conn.GetEventGorm()
 	session := db.Session(config)
-	stmt := session.Table("ddd_event").Select("*").Where("ddd_event_id = ?", id).UpdateColumns(eventInfo).Statement
+	stmt := session.Table("ddd_event").Select("event_type,event_tag,event_name,stream_ids,event_version,event_link,comment").Where("ddd_event_id = ?", id).UpdateColumns(eventInfo).Statement
 	//stmt := session.Table("ddd_event").Where("ddd_event_id = ?", id).Save(eventInfo).Statement
 
 	fmt.Println("sql is :", stmt.SQL.String())
