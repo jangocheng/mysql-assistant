@@ -1,11 +1,5 @@
 # TODO
 
-## BUG
-mysql-binlog 插入和删除内容为空
-状态添加不可能
-状态编辑有问题
-数据编辑 时间为0
-
 ## 功能
 mysql schema 版本管理， 
 生成不同版本修改schema的sql
