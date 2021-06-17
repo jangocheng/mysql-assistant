@@ -211,6 +211,20 @@ func GetStateDirectionList(c *gin.Context) {
 	out.NewSuccess(gin.H{"total": total, "rows": list}).JSONOK(c)
 }
 
+func ADDStateDirection(c *gin.Context) {
+	info := models.StateDirection{}
+	err := apputil.ShouldBindOrError(c, &info)
+
+	db := conn.GetEventGorm()
+	err = db.Table("state_direction").Create(&info).Error
+	if err != nil {
+		out.NewError(800, err.Error()).JSONOK(c)
+		return
+	}
+
+	out.NewSuccess(info).JSONOK(c)
+}
+
 func GetStateAbnormalList(c *gin.Context) {
 	pageParams := &reqt.PageParam{}
 	c.ShouldBindQuery(&pageParams)

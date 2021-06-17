@@ -35,7 +35,7 @@ func StateGraph(c *gin.Context) {
 			fmt.Println("state class miss direction node ", stateClassId, value.StateFrom, value.StateTo)
 		}
 
-		g.Edge(from, to)
+		g.Edge(from, to, value.Label)
 	}
 
 	output := g.String()

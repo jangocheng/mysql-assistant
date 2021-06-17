@@ -215,7 +215,7 @@
     function initMenuSelect() {
         let stateClassId = getSearchId("stat_class_id")
         $.ajax({
-            url: window.location.origin + "/admin-api/v1/state?state_class_id=" + stateClassId,
+            url: window.location.origin + "/admin-api/v1/state?pageSize=500&state_class_id=" + stateClassId,
             method: 'GET',
             async: true,
             success: function (res) {

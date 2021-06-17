@@ -78,6 +78,7 @@ func adminRoute(router *gin.Engine) {
 		adminAPI.DELETE("/state/:id", admin.DeleteStat)
 
 		adminAPI.GET("/state_direction", admin.GetStateDirectionList)
+		adminAPI.POST("/state_direction", admin.ADDStateDirection)
 		adminAPI.DELETE("/state_direction/:id", admin.DeleteStatDirection)
 
 		adminAPI.GET("/state_abnormal", admin.GetStateAbnormalList)
