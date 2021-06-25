@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"owen2020/conn"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -17,7 +16,6 @@ import (
 func StartGin() {
 	router := SetUpRouter()
 
-	conn.InitEventGormPool()
 	// If you want Graceful Restart, you need a Unix system and download github.com/fvbock/endless
 	// endless.DefaultReadTimeOut = readTimeout
 	// endless.DefaultWriteTimeOut = writeTimeout
