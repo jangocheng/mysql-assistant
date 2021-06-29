@@ -130,10 +130,12 @@
                                 <thead>
                                 <tr>
                                     <th>主键ID</th>
-                                    <th>组ID</th>
-                                    <th>组名称</th>
-                                    <th>状态名称</th>
-                                    <th>状态值</th>
+                                    <th>库名</th>
+                                    <th>表名</th>
+                                    <th>字段名</th>
+                                    <th>状态名</th>
+                                    <th>状态节点名称</th>
+                                    <th>状态节点值</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
@@ -271,8 +273,10 @@
 <script id="table-list" type="text/x-jquery-tmpl">
 <tr>
     <td>${state_id}</td>
-    <td>${state_class_id}</td>
-    <td>${state_class_id}</td>
+    <td>${db_name}</td>
+    <td>${table_name}</td>
+    <td>${field_name}</td>
+    <td>(${state_class_id})${state_class_name}</td>
     <td>${state_value_desc}</td>
     <td>${state_value}</td>
     <td>{{html operation}}</td>

@@ -37,19 +37,37 @@ var (
 // 通过ID批量获取
 func (s *stateDAO) GetMulti(idList []int) (map[int]*models.State, error) {
 	var stateMap = make(map[int]*models.State, 0)
-	var states = make([]models.State,0 , 10)
+	var states = make([]models.State, 0, 10)
 	conn.InitEventGormPool()
 	apputil.PrettyPrint(stateMap)
 	apputil.PrettyPrint(states)
 	m := s.newEngine(false)
 	apputil.PrettyPrint(m)
 	query := m.Table("state").Where("state_id IN ?", idList)
-	err:= query.Find(&states).Error
+	err := query.Find(&states).Error
 	if err != nil {
 		logrus.Errorf("partnerDAO, error when GetMulti: %v", err)
 	}
 	for _, state := range states {
-		stateMap[state.StateId] = &state
+		tmp := state
+		stateMap[state.StateId] = &tmp
+	}
+	return stateMap, nil
+}
+
+func (s *stateDAO) GetMultiByValue(stateClassId int, valueList []string) (map[string]*models.State, error) {
+	var stateMap = make(map[string]*models.State, 0)
+	var states = make([]models.State, 0, 10)
+	conn.InitEventGormPool()
+	m := s.newEngine(false)
+	query := m.Table("state").Where("state_class_id = ?", stateClassId).Where("state_value IN ?", valueList)
+	err := query.Find(&states).Error
+	if err != nil {
+		logrus.Errorf("partnerDAO, error when GetMulti: %v", err)
+	}
+	for _, state := range states {
+		tmp := state
+		stateMap[state.StateValue] = &tmp
 	}
 	return stateMap, nil
 }

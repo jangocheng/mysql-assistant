@@ -7,6 +7,8 @@ import (
 	"owen2020/app/reqt"
 	"owen2020/app/resp/out"
 	"owen2020/conn"
+	"owen2020/service/dml"
+	"owen2020/service/state/defines"
 	"strconv"
 	"time"
 )
@@ -95,7 +97,7 @@ func EditStateClass(c *gin.Context) {
 	if err != nil {
 		return
 	}
-	info.StateClassId,_ = strconv.Atoi(id)
+	info.StateClassId, _ = strconv.Atoi(id)
 
 	db := conn.GetEventGorm()
 	session := db.Table("state_class").Select("*").Where("state_class_id = ?", id).UpdateColumns(info)
@@ -132,7 +134,7 @@ func EditState(c *gin.Context) {
 	if err != nil {
 		return
 	}
-	info.StateId ,_ = strconv.Atoi(id)
+	info.StateId, _ = strconv.Atoi(id)
 
 	db := conn.GetEventGorm()
 	session := db.Table("state").Select("state_class_id,state_value,state_value_desc").Where("state_id = ?", id).UpdateColumns(info)
@@ -175,7 +177,25 @@ func GetStateList(c *gin.Context) {
 		return
 	}
 
-	out.NewSuccess(gin.H{"total": total, "rows": list}).JSONOK(c)
+	var stateClassIdList []int
+	for _, v := range list {
+		stateClassIdList = append(stateClassIdList, v.StateClassId)
+	}
+	stateClassList, _ := dml.StateClassDAO.GetMulti(stateClassIdList)
+	retList := []defines.StateDTO{}
+	for _, v := range list {
+		dto := defines.StateDTO{State:v}
+		if stateClass, ok := stateClassList[v.StateClassId]; ok {
+			dto.DbName = stateClass.DbName
+			dto.TableName = stateClass.TableName
+			dto.FieldName = stateClass.FieldName
+			dto.StateClassName = stateClass.StateName
+		}
+
+		retList = append(retList, dto)
+	}
+
+	out.NewSuccess(gin.H{"total": total, "rows": retList}).JSONOK(c)
 }
 
 func GetStateDirectionList(c *gin.Context) {
@@ -208,7 +228,26 @@ func GetStateDirectionList(c *gin.Context) {
 		return
 	}
 
-	out.NewSuccess(gin.H{"total": total, "rows": list}).JSONOK(c)
+	var stateValueList []string
+	for _, v := range list {
+		stateValueList = append(stateValueList, v.StateFrom)
+		stateValueList = append(stateValueList, v.StateTo)
+	}
+	stateList, _ := dml.StateDAO.GetMultiByValue(stateClassId, stateValueList)
+	retList := []defines.StateDirectionDto{}
+	for _, v := range list {
+		dto := defines.StateDirectionDto{v, "", ""}
+		if state, ok := stateList[v.StateFrom]; ok {
+			dto.StateFromDesc = state.StateValueDesc
+		}
+		if state, ok := stateList[v.StateTo]; ok {
+			dto.StateToDesc = state.StateValueDesc
+		}
+
+		retList = append(retList, dto)
+	}
+
+	out.NewSuccess(gin.H{"total": total, "rows": retList}).JSONOK(c)
 }
 
 func ADDStateDirection(c *gin.Context) {
