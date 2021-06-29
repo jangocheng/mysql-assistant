@@ -7,6 +7,8 @@ import (
 
 
 // HandleEvent mysql binlog event 处理
+// https://www.cnblogs.com/f-zhao/p/7639888.html
+// https://baijiahao.baidu.com/s?id=1649870303802210611&wfr=spider&for=pc
 func HandleEvent(e *replication.BinlogEvent) {
 	switch e.Header.EventType {
 	// case replication.UNKNOWN_EVENT:
