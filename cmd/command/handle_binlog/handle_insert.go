@@ -56,7 +56,7 @@ func insertRoutineModelStream(ev *replication.RowsEvent) {
 		for idx, value := range ev.Rows[i] {
 			allColumns = append(allColumns, tableSchema[idx])
 			updatedColumns = append(updatedColumns, tableSchema[idx])
-			updatedData[tableSchema[idx]] = value
+			updatedData[tableSchema[idx]], _ = common.GetStringValue(value)
 		}
 
 		stream.Columns = strings.Join(allColumns, ",")

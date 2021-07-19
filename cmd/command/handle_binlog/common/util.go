@@ -3,6 +3,7 @@ package common
 import (
 	"errors"
 	"fmt"
+	"reflect"
 	"strconv"
 )
 
@@ -107,9 +108,12 @@ func GetIntValue(a interface{}) (int, error) {
 }
 
 func GetStringValue(a interface{}) (string, error) {
+
 	switch a.(type) {
 	case int8:
 		return strconv.FormatInt(int64(a.(int8)), 10), nil
+	case []uint8:
+		return string(a.([]uint8)), nil
 	case uint8: //byte
 		return strconv.FormatUint(uint64(a.(uint8)), 10), nil
 	case int16:
@@ -139,8 +143,12 @@ func GetStringValue(a interface{}) (string, error) {
 	case uintptr:
 		return fmt.Sprint(a), nil
 	case string:
-		return "\"" + a.(string) + "\"", nil
+		return a.(string), nil
 	default: // 其他类型有pointer， struct， array, slice ,map, interface, function, channel
-		return "", errors.New("type not support")
+		val := reflect.ValueOf(a)
+		typ := reflect.Indirect(val).Type()
+		fmt.Println(typ)
+
+		return "", errors.New("type not support:" + fmt.Sprint(typ))
 	}
 }
